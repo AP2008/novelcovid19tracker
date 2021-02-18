@@ -1,6 +1,13 @@
 from modules import *
 from web_scrape import *
 from sidebar import *
+from werkzeug.wsgi import FileWrapper
+from flask import Response
+import maintheme
+
+df = pd.DataFrame([[1,2,3],
+                   [4,5,6]])
+df.columns = ["a", "b", "c"]
 
 colors = {
     'background': '#111111',
@@ -38,7 +45,7 @@ CONTENT_STYLE = {
     "margin-right": "2rem",
     #"padding": "2rem 1rem",
 }
-external_stylesheets = [dbc.themes.SOLAR, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [maintheme.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
@@ -46,18 +53,8 @@ app = dash.Dash(__name__,
 )
 app.layout = html.Div(children=[
     html.Div([
-        navbar
+        navbar("DataTable")
     ]),
-    # html.A(html.Button('Home'),
-                      # href='http://127.0.0.1:8080/home'),
-    # html.A(html.Button('Bar'),
-                      # href='http://127.0.0.1:8080/bar'),
-    # html.A(html.Button('Pie'),
-                      # href='http://127.0.0.1:8080/pie'),
-    # html.A(html.Button('Map'),
-                      # href='http://127.0.0.1:8080/map'),
-    # html.A(html.Button('Table'),
-                      # href='http://127.0.0.1:8080/table'),
 html.Div([
     html.Div(id='dropper', children=[
         dcc.Dropdown(
@@ -67,7 +64,7 @@ html.Div([
                 {'label': 'India', 'value':'india'}
             ],
             style=dict(width='40%'),
-            value='india'
+            value='world'
         )
     ]),
     html.Div(id='tabs', children=[
@@ -92,11 +89,12 @@ html.Div([
                 'color': 'white'
             },
             filter_action="native",
-            sort_action="native"
+            sort_action="native",
+
         ),
         dcc.Interval(
             id='interval-com',
-            interval=10000,
+            interval=10000000,
             n_intervals=0
             )
     ]),
@@ -122,6 +120,7 @@ html.Div([
 #    style={'backgroundColor': colors['background'],
 #          'color': colors['text']}
 )
+zone = 0
 def call_name_time(fe):
     global zone
     zone = fe
@@ -140,7 +139,7 @@ def multi_g(vars1, vars2):
     varmulti2 = vars2
 def get_dist(value):
     URL = 'https://api.covid19india.org/csv/latest/district_wise.csv'
-    page = requests.get(URL).content
+    page = requests.get(URL, verify=False).content
     df = pd.read_csv(io.StringIO(page.decode('utf-8')))
     df = df[['District', 'Confirmed', 'Active', 'Deceased', 'Recovered', 'State']]
     df = df.fillna(0)
@@ -177,7 +176,7 @@ def tab(value):
     else:
         print('gone through')
         return dcc.Tabs(id='india-tabs',
-                        value='States',
+                        value='Districts',
                         children=[
                             dcc.Tab(label='States', value='States', style=tab_style, selected_style=tab_selected_style),
                             dcc.Tab(label='Districts', value='Districts', style=tab_style, selected_style=tab_selected_style)
@@ -226,7 +225,6 @@ def anakin(valet):
                {'display':'block'}, {'display':'none'}
 
 
-
 @app.callback([Output('table', 'columns'),
             Output('table', 'data')],
             [Input('tabs-table', 'value'),
@@ -234,6 +232,38 @@ def anakin(valet):
             Input('interval-com', 'n_intervals')])
 def hansolo(val, value, nwemmw):
     print(value)
+    if value == 'world':
+        URL = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.json"
+        df1 = pd.read_json(requests.get(URL, verify=False).content).transpose()
+        country = df1["location"]
+        ncols = ['location', 'continent', 'total_cases',  'total_deaths', 'new_cases', 'new_deaths', 'total_tests', 'tests_per_case', 'total_vaccinations']
+        col_names = ["Country", "Continent", "Confirmed Case", "Confirmed Deaths",
+                     "New Cases", "New Deaths", "Total Tests", "Tests / Case", "Total Vaccinations"]
+        df2 = df1[ncols]
+        df2.columns = col_names
+        vst(df2)
+        data = list(df2.to_dict(orient = 'records'))
+        def fun(val, ndf):
+            asia = []
+            x=0
+            for i in ndf['Continent']:
+                if i == val:
+                    asia.append(x)
+                x+=1
+            ndf = ndf.reset_index()
+            dec = list(range(len(ndf['Country'])))
+            diff = list(set(dec) - set(asia))
+            ndf = ndf.drop('index', axis=1)
+            data1 = ndf.drop(diff)
+            return data1
+        if val != 'All':
+            data1 = fun(val, df2)
+            data = list(data1.to_dict(orient='records'))
+            vst(data1)
+        df2 = df2.drop("Continent", axis=1)
+        columns = [{'name':col, 'id':col} for col in df2.columns]
+        return columns, data
+    """
     if value == 'world':
         URL = "https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv"
         df2 = pd.read_csv(URL)
@@ -267,7 +297,7 @@ def hansolo(val, value, nwemmw):
             r+=1
         url = "https://www.worldometers.info/coronavirus/#countries"
 
-        web_content = requests.get(url).content
+        web_content = requests.get(url, verify=False).content
         # parse the html content
         soup = bs(web_content, "html.parser")
         # remove any newlines and extra spaces from left and right
@@ -282,7 +312,7 @@ def hansolo(val, value, nwemmw):
         ncols = [
             "SR no.", "Country", "Cases", "New Cases", "Deaths", "New Deaths",
             "Recoveries", "New Recoveries", "Active", "Serious", "Cases/1M pop",
-            "Deaths/1M pop", "Total Tests", "Tests/1M pop", "Population", "Continent", "1 case every X ppl", 
+            "Deaths/1M pop", "Total Tests", "Tests/1M pop", "Population", "Continent", "1 case every X ppl",
             "1 Death every X ppl", "1 Test every X ppl"]
         df = pd.DataFrame(data=stats, columns=ncols)
         ndf = df
@@ -323,6 +353,7 @@ def hansolo(val, value, nwemmw):
             vst(data1)
 
         return ncols, data #, {'display':'none'}, {'display':'block'}
+        """
 
 
 
@@ -341,27 +372,11 @@ def lukeskywalker(i_tabs, i_drop):
     print(i_tabs)
     if i_tabs == 'States':
         print('hellllllllllllofwrfkr3jgklr4tgkg45g4kglkl4')
-#        url = 'https://www.mohfw.gov.in/'
-
-#        web_content = requests.get(url).content
-#        soup = bs(web_content, "html.parser")
-#        extract_contents = lambda row: [x.text.replace('\n', '') for x in row]
-#        stats = []
-#        all_rows = soup.find_all('tr')
-#        for row in all_rows:
-#            stat = extract_contents(row.find_all('td'))
-#            print(len(stat))
-#            if len(stat) == 6:
-#                stats.append(stat)
-#        ncols = ["Sr.No", "States/UT", "Active", "Recovered","Deceased","Confirmed"]
-#        state_data = pd.DataFrame(data = stats, columns = ncols)
-#        print(stats)
         URL = 'https://api.covid19india.org/csv/latest/state_wise.csv'
-        page = requests.get(URL).content
+        page = requests.get(URL, verify=False).content
         df = pd.read_csv(io.StringIO(page.decode('utf-8')))
         ncols = ['State', 'Confirmed', 'Recovered', 'Deaths', 'Active']
         df = df[ncols]
-#        df['Confirmed'] = df['Confirmed'].apply(pd.to_numeric)
         vst(df)
         ncols = [{'name': col, 'id': col} for col in df.columns]
         data=list(df.to_dict("records"))
@@ -403,7 +418,7 @@ def lukeskywalker(i_tabs, i_drop):
 def lint1(ur, utp):
     vent = time.time()
     call_name_time(vent)
-    return html.A(id = 'nen', children = [html.Button('Download Data as xlsx')], href = 'https://novelcovid19tracker.herokuapp.com/table/corona-report/urlToDownload?value={}'.format(str(vent)))
+    return html.A(id = 'nen', children = [html.Button('Download Data as xlsx')], href = 'http://thunder2020.pythonanywhere.com/table/corona-report/urlToDownload?value={}'.format(str(vent)))
 
 @app.callback(Output('name88', 'children'),
             [Input('india-tabs', 'value'),
@@ -411,7 +426,7 @@ def lint1(ur, utp):
 def lint2(ur2, utp2):
     vent = time.time()
     call_name_time(vent)
-    return html.A(id = 'nen2', children = [html.Button('Download Data as xlsx')], href = 'https://novelcovid19tracker.herokuapp.com/table/corona-report/urlToDownload?value={}'.format(str(vent)))
+    return html.A(id = 'nen2', children = [html.Button('Download Data as xlsx')], href = 'http://thunder2020.pythonanywhere.com/table/corona-report/urlToDownload?value={}'.format(str(vent)))
 
 
 def r():
@@ -420,16 +435,20 @@ def r():
 @app.server.route('/corona-report/urlToDownload')
 def ex():
     kf = r()
+    print(kf)
     print('ha!')
     strIO = io.BytesIO()
     excel_writer = pd.ExcelWriter(strIO, engine="xlsxwriter")
     kf.to_excel(excel_writer, sheet_name="sheet1")
-    excel_writer.save()
-    excel_data = strIO.getvalue()
+    print("Ello")
+    excel_writer.close()
     strIO.seek(0)
-    return send_file(strIO,
-                     attachment_filename='Output.xlsx',
-                     as_attachment=True)
+    w = FileWrapper(strIO)
+    #file_wrapper = FileWrapper(excel_writer)
+#    headers = {
+#        'Content-Disposition': 'attachment; filename=output.xlsx'
+#    }
+    return Response(w, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", direct_passthrough=True)
 app.title = 'Corona Tracker'
 
 if __name__ == '__main__':

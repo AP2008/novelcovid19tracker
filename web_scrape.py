@@ -68,7 +68,7 @@ def get_crii(results):
     # return dates, cases
 # URL = 'https://www.worldometers.info/coronavirus/country/india/'
 
-# page = requests.get(URL)
+# page = requests.get(URL, verify=False)
 # soup = bs(page.content, 'html.parser') #Gets the HTML content using bs4
 # results = soup.find_all(id='maincounter-wrap') #Finds all content with id 'maincounter-wrap'
 

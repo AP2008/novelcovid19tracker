@@ -1,8 +1,10 @@
 from modules import *
 from web_scrape import *
 from sidebar import *
+import listed
+import maintheme
 
-external_stylesheets = [dbc.themes.SOLAR, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [maintheme.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 colors = {
     'background': '#111111',
@@ -12,7 +14,7 @@ colors = {
     # print("HELLO")
     # url = 'https://www.mohfw.gov.in/'
 
-    # web_content = requests.get(url).content
+    # web_content = requests.get(url, verify=False).content
     # soup = bs(web_content, "html.parser")
     # extract_contents = lambda row: [x.text.replace('\n', '') for x in row]
     # stats = []
@@ -99,7 +101,7 @@ app.layout = html.Div(children=[
                       # href='http://127.0.0.1:8080/map'),
     # html.A(html.Button('Table'),
                       # href='http://127.0.0.1:8080/table'),
-    html.Div([navbar]),
+    html.Div([navbar("Map")]),
     html.Div([
         dcc.Dropdown(
             id='drop',
@@ -136,14 +138,14 @@ def map(n, drop_val):
     if drop_val == 'india':
         print("HELLO")
         URL = 'https://api.covid19india.org/csv/latest/state_wise.csv'
-        page = requests.get(URL).content
+        page = requests.get(URL, verify=False).content
         df = pd.read_csv(io.StringIO(page.decode('utf-8')))
         ncols = ['State', 'Confirmed', 'Recovered', 'Deaths', 'Active']
         df = df[ncols]
         df = df.drop([0, 36])
 #        url = 'https://www.mohfw.gov.in/'
 #
-#        web_content = requests.get(url).content
+#        web_content = requests.get(url, verify=False).content
 #        soup = bs(web_content, "html.parser")
 #        extract_contents = lambda row: [x.text.replace('\n', '') for x in row]
 #        stats = []
@@ -161,8 +163,9 @@ def map(n, drop_val):
         states = list(df['State'])
         cases = list(df['Confirmed'].map(int))
 
-        with open("listed.geojson") as geofile:
-            jdata = json.load(geofile)
+#        with open(app.get_asset_url('listed.geojson')) as geofile:
+#            jdata = json.load(geofile)
+        jdata = json.loads(listed.k)
 
         i = 1
         for feature in jdata['features']:
@@ -193,14 +196,14 @@ def map(n, drop_val):
             if x in list(states):
                 z.append(dictionary[x])
                 text.append('' + state
-                    + '<br> Confirmed: ' + str(df.loc[state][new_cols[1]]) 
-                    + '<br> Recovered: ' + str(df.loc[state][new_cols[2]]) 
+                    + '<br> Confirmed: ' + str(df.loc[state][new_cols[1]])
+                    + '<br> Recovered: ' + str(df.loc[state][new_cols[2]])
                     + '<br> Deceased: ' + str(df.loc[state][new_cols[3]])
                     + '<br> Active: ' + str(df.loc[state][new_cols[4]]))
             else:
                 text.append('State: ' + state
-                    + '<br> Confirmed: ' + str(0) 
-                    + '<br> Recovered: ' + str(0) 
+                    + '<br> Confirmed: ' + str(0)
+                    + '<br> Recovered: ' + str(0)
                     + '<br> Deceased: ' + str(0)
                     + '<br> Active: ' + str(0))
                 z.append(0)
@@ -208,7 +211,7 @@ def map(n, drop_val):
         mapboxt = 'pk.eyJ1IjoiYXIyMDA4IiwiYSI6ImNrOHduZGx2dzBjYTczZnFvNXE4dW5odjkifQ.xQGBYsA7sBziM2gfj9CrmA'
 
 #        locations = [1+x for x in range(len(states))]
-        
+
 #        state_data.index = state_data[new_cols[1]]
         trace = go.Choroplethmapbox(z=z,
                                     locations=locations,
@@ -221,8 +224,8 @@ def map(n, drop_val):
 
         layout = go.Layout(title_text='Choropleth Map of Confirmed Covid-19 cases in India',
                            title_x=0.5,height=800,
-                                         plot_bgcolor='#111111',
-                                         paper_bgcolor='#111111',
+                                         plot_bgcolor='#2B3E50',
+                                         paper_bgcolor='#2B3E50',
                            mapbox_style="dark", mapbox_accesstoken=mapboxt,
                            mapbox = dict(center= dict(lat=20.5937, lon=78.9629),
                                          accesstoken= mapboxt,

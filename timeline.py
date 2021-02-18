@@ -1,8 +1,9 @@
 from modules import *
 from web_scrape import *
 from sidebar import *
+import maintheme
 
-external_stylesheets = [dbc.themes.SOLAR, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [maintheme.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 colors = {
     'background': '#111111',
@@ -1255,7 +1256,7 @@ page_countries = [
     ]
 countries = pd.DataFrame.from_dict(page_countries)['Country'].values.tolist()
 slugs = pd.DataFrame.from_dict(page_countries)['Slug'].values.tolist()
-page = requests.get(url)
+page = requests.get(url, verify=False)
 dates = pd.DataFrame.from_dict(page.json())['Date'].values.tolist()
 ddc = []
 for i, country in enumerate(countries):
@@ -1280,7 +1281,7 @@ CONTENT_STYLE = {
 }
 
 app.layout = html.Div([
-    navbar,
+    navbar("Timeline"),
     # html.A(html.Button('Home'),
                       # href='http://127.0.0.1:8080/home'),
     # html.A(html.Button('Bar'),
@@ -1329,7 +1330,7 @@ style=CONTENT_STYLE)
                 [Input('drop', 'value')])
 def fnucs(val_d):
     URL = 'https://api.covid19api.com/total/dayone/country/' + val_d + '/status/confirmed'
-    page = requests.get(URL)
+    page = requests.get(URL, verify=False)
     dates = pd.DataFrame.from_dict(page.json())['Date'].values.tolist()
     datesF = []
     for i in dates:
@@ -1365,13 +1366,13 @@ def plot_bar(val, n, start, end):
     end_index = datesF.index((int(end[0]), int(end[1]), int(end[2]))) + 1
     print(start_index, end_index)
     URL = 'https://api.covid19api.com/total/dayone/country/' + val + '/status/confirmed'
-    page = requests.get(URL)
+    page = requests.get(URL, verify=False)
     dfc = pd.DataFrame.from_dict(page.json())
     URL = 'https://api.covid19api.com/total/dayone/country/' + val + '/status/recovered'
-    page = requests.get(URL)
+    page = requests.get(URL, verify=False)
     dfr = pd.DataFrame.from_dict(page.json())
     URL = 'https://api.covid19api.com/total/dayone/country/' + val + '/status/deaths'
-    page = requests.get(URL)
+    page = requests.get(URL, verify=False)
     dfd = pd.DataFrame.from_dict(page.json())
     fig = ms(rows = 2, cols=2,
         specs=[[{}, {}],
@@ -1399,7 +1400,7 @@ def plot_bar(val, n, start, end):
                       pad=0
                             ),
                       # plot_bgcolor='#111111',
-                      paper_bgcolor='#002b36')
+                      paper_bgcolor='#2B3E50')
                       # title={
                           # 'text': f"COVID 19 DATA OF {val} IN 2020",
                           # 'y':0.9,

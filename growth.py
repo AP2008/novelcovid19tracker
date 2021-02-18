@@ -7,8 +7,9 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from sidebar import *
+import maintheme
 
-external_stylesheets = [dbc.themes.SOLAR, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [maintheme.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 url_countries = 'https://api.covid19api.com/countries'
 page_countries = [
     {
@@ -1261,7 +1262,7 @@ for i, country in enumerate(countries):
 
 def get_df(country: str, case_type: str) -> pd.DataFrame:
     url = 'https://api.covid19api.com/total/dayone/country/' + country + '/status/' + case_type
-    page = requests.get(url)
+    page = requests.get(url, verify=False)
     df = pd.DataFrame.from_dict(page.json())
     print(df)
     dates = df['Date'].values.tolist()
@@ -1301,7 +1302,7 @@ CONTENT_STYLE = {
     "padding": "2rem 1rem",
 }
 app.layout = html.Div([
-    navbar,
+    navbar("Growth"),
     html.Div([
         dcc.Dropdown(
             id = 'drop',
@@ -1365,8 +1366,8 @@ def plot(value, n):
                           t=20,
                           pad=0
                       ),
-                      plot_bgcolor='#002b36',
-                      paper_bgcolor='#002b36')
+                      plot_bgcolor='#2B3E50',
+                      paper_bgcolor='#2B3E50')
     fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'))
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
 

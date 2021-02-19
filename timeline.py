@@ -1282,16 +1282,6 @@ CONTENT_STYLE = {
 
 app.layout = html.Div([
     navbar("Timeline"),
-    # html.A(html.Button('Home'),
-                      # href='http://127.0.0.1:8080/home'),
-    # html.A(html.Button('Bar'),
-                      # href='http://127.0.0.1:8080/bar'),
-    # html.A(html.Button('Pie'),
-                      # href='http://127.0.0.1:8080/pie'),
-    # html.A(html.Button('Map'),
-                      # href='http://127.0.0.1:8080/map'),
-    # html.A(html.Button('Table'),
-                      # href='http://127.0.0.1:8080/table'),
 html.Div([
     html.Div(id = 'Fe_He', children=[
         dcc.DatePickerRange(
@@ -1323,7 +1313,6 @@ html.Div([
     ], className='six columns')],
 style=CONTENT_STYLE)
   ]#,
-    #style={'color': colors['text']}
 )
 
 @app.callback(Output('Fe_He', 'children'),

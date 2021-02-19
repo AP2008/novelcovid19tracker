@@ -11,7 +11,6 @@ sn = {'color':'white'}
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets, requests_pathname_prefix='/home/')
 CORONA_LOGO = 'https://cdn.cnn.com/cnnnext/dam/assets/200204130938-cdc-coronavirus-illustration-exlarge-169.jpg'
-#app.scripts.append_script({'external_url': 'https://thunder2020.pythonanywhere.com/assets/gtag.js'})
 app.layout = html.Div(children=[
     html.Div(id="PEST"),
     html.Div([

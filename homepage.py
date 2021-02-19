@@ -1,10 +1,9 @@
 from modules import *
 from sidebar import *
 from cop import create_cop
-import maintheme
-from flask import request
+import extras
 
-external_stylesheets = [maintheme.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 sn = {'color':'white'}
 
 
@@ -161,7 +160,7 @@ def fU_HAN_LUKE_CORRAN(n):
 @app.callback(Output("ROW12", "children"),
               [Input("i-c", "n-intervals")])
 def hkhk(a):
-    country = requests.get("http://ip-api.com/json/{}?fields=countryCode".format(request.headers.get('X-Forwarded-For'))).json()["countryCode"]
+    country = extras.getip()
     h = requests.get("http://api.covid19api.com/summary", verify=False).json()
     n = pd.DataFrame.from_dict(h["Countries"])
     c = n.loc[n["CountryCode"] == country]

@@ -7,9 +7,9 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from sidebar import *
-import maintheme
+import extras
 
-external_stylesheets = [maintheme.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 url_countries = 'https://api.covid19api.com/countries'
 page_countries = [
     {
@@ -1254,8 +1254,9 @@ page_countries = [
     }
 ]
 
-countries = pd.DataFrame.from_dict(page_countries)['Country'].values.tolist()
-slugs = pd.DataFrame.from_dict(page_countries)['Slug'].values.tolist()
+n = pd.DataFrame.from_dict(page_countries)
+countries = n['Country'].values.tolist()
+slugs = n['Slug'].values.tolist()
 ddc = []
 for i, country in enumerate(countries):
     ddc.append({'label': country, 'value': slugs[i]})
@@ -1295,7 +1296,7 @@ def get_range(cases: list) -> list:
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
-                requests_pathname_prefix='/growth/')
+                )#requests_pathname_prefix='/growth/')
 CONTENT_STYLE = {
     "margin-left": "18rem",
     "margin-right": "2rem",
@@ -1304,11 +1305,15 @@ CONTENT_STYLE = {
 app.layout = html.Div([
     navbar("Growth"),
     html.Div([
+        dcc.Interval(
+            id="ic",
+            interval=20000,
+            n_intervals=0
+        ),
         dcc.Dropdown(
             id = 'drop',
             options = ddc,
             style=dict(width='100%'),
-            value='india'
         ),
         html.Div([
             dcc.Graph(
@@ -1323,6 +1328,15 @@ app.layout = html.Div([
     ], style=CONTENT_STYLE)
 ])
 
+
+@app.callback(Output("drop", "value"),
+        [Input("ic", "n_intervals")])
+def updip(n):
+    s = extras.getip()
+    print(s)
+    h = n['ISO2'].values.tolist().index(s)
+    c = slugs[h]
+    return c
 
 @app.callback(Output('graph', 'figure'),
               [Input('drop', 'value'),

@@ -3,7 +3,7 @@ from web_scrape import *
 from sidebar import *
 from werkzeug.wsgi import FileWrapper
 from flask import Response
-import maintheme
+import extras
 
 df = pd.DataFrame([[1,2,3],
                    [4,5,6]])
@@ -45,7 +45,7 @@ CONTENT_STYLE = {
     "margin-right": "2rem",
     #"padding": "2rem 1rem",
 }
-external_stylesheets = [maintheme.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,

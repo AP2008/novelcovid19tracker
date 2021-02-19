@@ -1,9 +1,9 @@
 from web_scrape import *
 from modules import *
 from sidebar import *
-import maintheme
+import extras
 
-external_stylesheets = [maintheme.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 colors = {
     'background': '#111111',

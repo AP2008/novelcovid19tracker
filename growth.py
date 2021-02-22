@@ -9,6 +9,8 @@ from dash.dependencies import Input, Output
 from sidebar import *
 import extras
 
+pt = True
+nhj=""
 external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
 url_countries = 'https://api.covid19api.com/countries'
 page_countries = [
@@ -1265,7 +1267,6 @@ def get_df(country: str, case_type: str) -> pd.DataFrame:
     url = 'https://api.covid19api.com/total/dayone/country/' + country + '/status/' + case_type
     page = requests.get(url, verify=False)
     df = pd.DataFrame.from_dict(page.json())
-    print(df)
     dates = df['Date'].values.tolist()
     ddc = []
     for i, country in enumerate(countries):
@@ -1296,7 +1297,7 @@ def get_range(cases: list) -> list:
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
-                )#requests_pathname_prefix='/growth/')
+                requests_pathname_prefix='/growth/')
 CONTENT_STYLE = {
     "margin-left": "18rem",
     "margin-right": "2rem",
@@ -1328,21 +1329,28 @@ app.layout = html.Div([
     ], style=CONTENT_STYLE)
 ])
 
-
 @app.callback(Output("drop", "value"),
         [Input("ic", "n_intervals")])
-def updip(n):
+def updip(r):
+    global pt
     s = extras.getip()
-    print(s)
-    h = n['ISO2'].values.tolist().index(s)
-    c = slugs[h]
-    return c
+    print(pt)
+    if pt != s:
+        pt = s
+        print("PT: ", pt)
+        h = n['ISO2'].values.tolist().index(s)
+        c = slugs[h]
+        return c
+    else:
+        print(nhj)
+        return nhj
 
 @app.callback(Output('graph', 'figure'),
               [Input('drop', 'value'),
                Input('interval_component', 'n_intervals')])
 def plot(value, n):
-    print(value)
+    global nhj
+    nhj = value
     dfc = get_df(value, 'confirmed')
     dates = dfc['Date']
     confirmed_diff = get_range(dfc['Cases'])

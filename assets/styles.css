@@ -1,0 +1,58 @@
+h1 {
+    font-size: 8vw;
+}
+
+.nav {
+    display: none;
+}
+
+.box {
+    display: flex;
+    flex-flow: column;
+}
+
+.spb {
+    height: 80vh;
+}
+
+.dash-cell-value {
+    font-size: 15px;
+}
+
+.sidenav li>a {
+    color: white !important;
+}
+
+.sidenav, nav {
+    background-color: #3c434a !important;
+}
+
+.act-link {
+    background-color: #5b778a !important;
+}
+
+.Select-value-label, .VirtualizedSelectOption, .Select-control, .is-open>.Select-control, .Select.is-focused>.Select-control {
+    background-color: #4e5d6c !important;
+    color: white !important;
+}
+
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner input:not([type=radio]):not([type=checkbox]) {
+    color: white !important;
+}
+
+.card-body {
+    background-color: #4e5d6c !important;
+}
+
+.btn {
+    height: auto !important;
+}
+
+@media (min-width: 768px) {
+    body {
+        font-size: 18px;
+    }
+    h1 {
+        font-size: 4vw;
+    }
+}

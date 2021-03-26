@@ -1,6 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
+from dash_defer_js_import import Import
 
 main = "http://thunder2020.pythonanywhere.com/"
 
@@ -15,35 +16,72 @@ SIDEBAR_STYLE = {
 }
 
 def navbar(ap):
+    navlinks = [
+                        # DONE
+                        dbc.NavLink("Home", href=f"{main}",   active=(ap == "Home")),
+                        # DONE
+                        dbc.NavLink("Timeline", href=f"{main}timeline/",   active=(ap == "Timeline")),
+                        # DONE
+                        dbc.NavLink("DataTable", href=f"{main}table/",   active=(ap == "DataTable")),
+                        # DONE
+                        dbc.NavLink("Map", href=f"{main}map/",   active=(ap == "Map")),
+                        # DONE
+                        dbc.NavLink("Counter", href=f"{main}counter/",   active=(ap == "Counter")),
+                        # DONE
+                        dbc.NavLink("Growth", href=f"{main}growth/",   active=(ap == "Growth")),
+                        # DONE
+                        dbc.NavLink("Infocenter", href=f"{main}infocentre/",   active=(ap == "Infocenter")),
+                        # # 0%
+                        # dbc.NavLink("Newsletter", href="https://cov
+                        # Done
+                        dbc.NavLink("About", href=f"{main}aboutme/",   active=(ap == "About"))
+    ]
+    Lis = []
+    for n in ["Home", "Timeline", "DataTable", "Map", "Counter", "Growth", "Infocenter", "About"]:
+        if ap == n:
+            Lis.append(html.Li(html.A(n, href=f"{main}{n.lower()}", className="act-link")))
+        else:
+            Lis.append(html.Li(html.A(n, href=f"{main}{n.lower()}")))
     navbar = html.Div([
-        html.H2("NavBar", className="display-4", style={'color':'black'}),
-        html.Hr(),
-        dbc.Nav(
-            [
-                # DONE
-                dbc.NavLink("Home", href=f"{main}", id="page-1-link", style={'color': 'black'}, active=(ap == "Home")),
-                # DONE
-                dbc.NavLink("Timeline", href=f"{main}timeline/", id="page-2-link", style={'color': 'black'}, active=(ap == "Timeline")),
-                # DONE
-                dbc.NavLink("DataTable", href=f"{main}table/", id="page-3-link", style={'color': 'black'}, active=(ap == "DataTable")),
-                # DONE
-                dbc.NavLink("Map", href=f"{main}map/", id="page-4-link", style={'color': 'black'}, active=(ap == "Map")),
-                # DONE
-                dbc.NavLink("Counter", href=f"{main}counter/", id="page-6-link", style={'color': 'black'}, active=(ap == "Counter")),
-                # DONE
-                dbc.NavLink("Growth", href=f"{main}growth/", id="page-7-link", style={'color': 'black'}, active=(ap == "Growth")),
-                # DONE
-                dbc.NavLink("Infocenter", href=f"{main}infocentre/", id="page-8-link", style={'color': 'black'}, active=(ap == "Infocenter")),
-                # # 0%
-                # dbc.NavLink("Newsletter", href="https://covid19tracknow.herokuapp.com/letter/", id="page-9-link"),
-                # Done
-                dbc.NavLink("About", href=f"{main}aboutme/", id="page-10-link", style={'color': 'black'}, active=(ap == "About"))
+        html.Div([
+            html.H2("NavBar", className="display-4", style={'color':'black'}),
+            html.Hr(),
+            dbc.Nav(
+                navlinks,
+                vertical=True,
+                pills=True,
+            ),
             ],
-            vertical=True,
-            pills=True,
+            style=SIDEBAR_STYLE,
+            className="nav"
         ),
-        ],
-        style=SIDEBAR_STYLE
-    )
+        html.Div([
+            html.Nav(
+                html.Div([
+                    html.A(
+                        "Covid-19",
+                        href="#!",
+                        className="brand-logo"),
+                    html.A(
+                        html.I("menu", className="material-icons"),
+                        href="#",
+                        className="sidenav-trigger",
+                        **{
+                            'data-target':"mobile-demo"
+                            }),
+                    html.Ul(Lis, className="right hide-on-med-and-down")
+                        ], className="nav-wrapper")),
+                    html.Ul(
+                        Lis, className="sidenav", id="mobile-demo"),
+                    Import(src="https://thunder2020.pythonanywhere.com/assets/nen.js"),
+        #html.Div([
+#            dbc.NavbarSimple(
+#                navlinks,
+#                color="dark",
+#                brand="Corona Tracker",
+#                dark=True
+#            )
+        ], className="topnav", style={'align': 'left'})
+    ])
     return navbar
 

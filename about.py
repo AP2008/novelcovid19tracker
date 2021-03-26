@@ -3,7 +3,7 @@ from modules import *
 from sidebar import *
 import extras
 
-external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme]
 
 colors = {
     'background': '#111111',
@@ -17,7 +17,7 @@ app = dash.Dash(__name__,
                 requests_pathname_prefix='/aboutme/')
 
 CONTENT_STYLE = {
-    "margin-left": "18rem",
+    "margin-left": "2rem",
     "margin-right": "2rem",
     "padding": "5rem 5rem",
     'color': '#FFFFFF'
@@ -52,6 +52,25 @@ app.layout = html.Div([
     ])
 ], style=CONTENT_STYLE)
 
+app.index_string = """<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>"""
 app.title="Corona Tracker"
 
 if __name__ == '__main__':

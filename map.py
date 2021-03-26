@@ -4,14 +4,14 @@ from sidebar import *
 import listed
 import extras
 
-external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme]
 
 colors = {
     'background': '#111111',
     'text': '#FFFFFF'
 }
 CONTENT_STYLE = {
-    "margin-left": "18rem",
+    "margin-left": "2rem",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
 }
@@ -28,7 +28,7 @@ app.layout = html.Div(children=[
                 {'label': 'World', 'value':'world'},
                 {'label': 'India', 'value':'india'}
             ],
-            style=dict(width='40%'),
+            style=dict(color='black'),
             value='world'
         ),
         html.Div([
@@ -42,7 +42,7 @@ app.layout = html.Div(children=[
                 interval=600000,
                 n_intervals=0
             )
-        ])
+        ], className='box')
     ], style=CONTENT_STYLE)
 ],
 )
@@ -145,8 +145,8 @@ def map(n, drop_val):
                                     hoverinfo='text',
                                     marker_line_width=0.1, marker_opacity=0.7)
 
-        layout = go.Layout(title_text='Choropleth Map of Confirmed Covid-19 cases in India',
-                           title_x=0.5,height=800,
+        layout = go.Layout(#title_text='Choropleth Map of Confirmed Covid-19 cases in India',
+                           title_x=0.5,#height=800,
                                          plot_bgcolor='#2B3E50',
                                          paper_bgcolor='#2B3E50',
                            mapbox_style="dark", mapbox_accesstoken=mapboxt,
@@ -181,13 +181,32 @@ def map(n, drop_val):
                     + '<br> Deaths: ' + str(single_list(dfData.loc[i]['total_deaths']))
                     + '<br> New Deaths: ' + str(single_list(dfData.loc[i]['new_deaths'])))
         fig = go.Figure(data=go.Choropleth(locations=locations, z=z, colorscale='Reds', text=text, hoverinfo='text'))
-        fig.update_layout(
-                title_text='Choropleth Map of Confirmed Covid-19 cases',
-                height=800
-        )
+#        fig.update_layout(
+#                title_text='Choropleth Map of Confirmed Covid-19 cases'#,
+#                height=800
+#        )
         return fig
 
 
+app.index_string = """<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>"""
 app.title = 'Corona Tracker'
 if __name__ == '__main__':
     app.run_server(debug=False)

@@ -156,6 +156,25 @@ def func(n):
 def funct(n, val):
     p_l = pd.DataFrame(json.loads(requests.get(URL, verify=False).content)["Countries"]).set_index("Slug")
     return int(p_l["TotalConfirmed"][val]), int(p_l["TotalDeaths"][val]), int(p_l["TotalRecovered"][val]), 'COVID19 CASES IN '+ val, 'COVID19 DEATHS IN '+ val, 'COVID19 RECOVERIES IN '+val
+app.index_string = """<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>"""
 app.title = 'Corona Tracker'
 
 if __name__ == '__main__':

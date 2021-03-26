@@ -8,10 +8,11 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from sidebar import *
 import extras
+#from dash_defer_js_import import Import
 
 pt = True
 nhj=""
-external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme]
 url_countries = 'https://api.covid19api.com/countries'
 page_countries = [
     {
@@ -1299,9 +1300,9 @@ app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
                 requests_pathname_prefix='/growth/')
 CONTENT_STYLE = {
-    "margin-left": "18rem",
-    "margin-right": "2rem",
-    "padding": "2rem 1rem",
+#    "margin-left": "18rem",
+#    "margin-right": "2rem",
+#    "padding": "2rem 1rem",
 }
 app.layout = html.Div([
     navbar("Growth"),
@@ -1325,8 +1326,8 @@ app.layout = html.Div([
                 interval=10000,
                 n_intervals=0
             )
-        ])
-    ], style=CONTENT_STYLE)
+        ], className="box")
+    ])
 ])
 
 @app.callback(Output("drop", "value"),
@@ -1362,40 +1363,62 @@ def plot(value, n):
     active_diff = get_range(dfa[dfa.columns[0]])
     fig = go.Figure()
     fig.add_trace(
-        go.Scatter(x=dates, y=confirmed_diff, name='Confirmed Cases Growth', line=dict(color='orange'))
+        go.Scatter(x=dates, y=confirmed_diff, name='New Cases', line=dict(color='orange'))
     )
     fig.add_trace(
-        go.Scatter(x=dates, y=deaths_diff, name='Deaths Growth', line=dict(color='red'))
+        go.Scatter(x=dates, y=deaths_diff, name='New Deaths', line=dict(color='red'))
     )
     fig.add_trace(
-        go.Scatter(x=dates, y=recovered_diff, name='Recoveries Growth', line=dict(color='green'))
+        go.Scatter(x=dates, y=recovered_diff, name='New Recoveries', line=dict(color='green'))
     )
     fig.add_trace(
-        go.Scatter(x=dates, y=active_diff, name='Active Cases Growth', line=dict(color='yellow'))
+        go.Scatter(x=dates, y=active_diff, name='New Active', line=dict(color='yellow'))
     )
-    fig.update_layout(showlegend=True,
+    fig.update_layout(showlegend=False,
                       legend=dict(
                           font=dict(
                               color="white"
                           )
                       ),
-                      width=1000,
-                      height=500,
+#                      width=1000,
+#                      height=500,
                       margin=dict(
-                          l=0,
+                          l=5,
                           r=0,
-                          b=15,
-                          t=20,
+                          b=5,
+                          t=0,
                           pad=0
                       ),
                       plot_bgcolor='#2B3E50',
                       paper_bgcolor='#2B3E50')
-    fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'))
+    fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'), rangeslider_visible=True)
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
 
     return fig
 
 
+app.index_string = """<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>"""
 app.title = 'Corona Tracker'
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@ from counter import app as counter
 from growth import app as growth
 from about_covid import app as about_covid
 from about import app as about_me
+import arc
 
 flask_app = Flask(__name__)
 
@@ -15,10 +16,11 @@ application = DispatcherMiddleware(home.server, {
     '/counter': counter.server,
     '/timeline': timeline.server,
     '/map': map.server,
-    '/table': table.server,
+    '/datatable': table.server,
     '/growth': growth.server,
     '/infocentre': about_covid.server,
-    '/aboutme': about_me.server
+    '/aboutme': about_me.server,
+    '/arc-sw.js': arc.app
 })
 
 # cherrypy.tree.graft(application, '/')

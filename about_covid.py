@@ -2,7 +2,7 @@ from modules import *
 from sidebar import *
 import extras
 
-external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme]
 
 colors = {
     'background': '#111111',
@@ -10,7 +10,7 @@ colors = {
 }
 
 CONTENT_STYLE = {
-    "margin-left": "18rem",
+    "margin-left": "2rem",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
     'color': '#FFFFFF'
@@ -90,13 +90,32 @@ app = dash.Dash(__name__,
 app.layout = html.Div([
     html.Div([navbar("Infocenter")]),
     dbc.Row([
-        dbc.Col(html.Div(what_is_covid)),
-        dbc.Col(html.Div(covid_symptoms))]),
-    dbc.Row([
-        dbc.Col(html.Div(covid_prevention)),
-        dbc.Col(html.Div(covid_vaccine))])
+        dbc.Col(html.Div(what_is_covid), width=12, lg=6),
+        dbc.Col(html.Div(covid_symptoms), width=12, lg=6),
+        dbc.Col(html.Div(covid_prevention), width=12, lg=6),
+        dbc.Col(html.Div(covid_vaccine), width=12, lg=6)
+    ])
 ],
 style=CONTENT_STYLE,
 className="row")
 
+app.index_string = """<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>"""
 app.title = 'Corona Tracker'

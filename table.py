@@ -9,6 +9,11 @@ df = pd.DataFrame([[1,2,3],
                    [4,5,6]])
 df.columns = ["a", "b", "c"]
 
+start_table_df = pd.DataFrame(columns=[''])
+
+color1 = '#48536D'
+color2 = '#5A6D81'
+
 colors = {
     'background': '#111111',
     'text': '#FFFFFF'
@@ -41,15 +46,15 @@ s2 = {
 }
 
 CONTENT_STYLE = {
-    "margin-left": "18rem",
-    "margin-right": "2rem",
+    "margin-left": "1rem",
+    "margin-right": "1rem",
     #"padding": "2rem 1rem",
 }
-external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme]
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
-               requests_pathname_prefix='/table/'
+               requests_pathname_prefix='/datatable/'
 )
 app.layout = html.Div(children=[
     html.Div([
@@ -63,13 +68,14 @@ html.Div([
                 {'label': 'World', 'value':'world'},
                 {'label': 'India', 'value':'india'}
             ],
-            style=dict(width='40%'),
-            value='world'
+            value='world',
+            searchable=False,
+            clearable=False
         )
     ]),
     html.Div(id='tabs', children=[
-        dcc.Tabs(id='tabs-table'),
-        dcc.Tabs(id='india-tabs')
+        dcc.Dropdown(id='tabs-table'),
+        dcc.Dropdown(id='india-tabs')
     ]),
     html.Div(id='name99', style={'display':'none'}),
     html.Div(id='name88', style={'display':'none'}),
@@ -83,11 +89,30 @@ html.Div([
     html.Div(id='table_div', children=[
         dash_table.DataTable(
             id='table',
+            data=start_table_df.to_dict('records'),
+            columns = [{'id': c, 'name': c} for c in start_table_df.columns],
             style_header={'backgroundColor': 'rgb(30, 30, 30)','color':'white'},
             style_cell={
-                'backgroundColor': 'rgb(50,50,50)',
+                'backgroundColor': color1,
                 'color': 'white'
             },
+            style_data_conditional = [
+                {
+                    'if': {'row_index': 'odd'},
+                    'backgroundColor': color2
+                },
+            ],
+            sort_mode="multi",
+            row_selectable="multi",
+            fixed_rows={'headers': True},
+            selected_rows=[],
+            page_current=0,
+            page_size=20,
+            style_table={
+                #"overflowY": "auto",
+                "overflowX": "auto",
+                "height": "80vh",
+                "borderRadius": "15px"},
             filter_action="native",
             sort_action="native",
 
@@ -97,15 +122,24 @@ html.Div([
             interval=10000000,
             n_intervals=0
             )
-    ]),
+    ], className="spb"),
     html.Div(id='tablet_div', children=[
         dash_table.DataTable(
             id='tablet',
             style_header={'backgroundColor': 'rgb(30, 30, 30)','color':'white'},
             style_cell={
-                'backgroundColor': 'rgb(50, 50, 50)',
+                'backgroundColor': color1,
                 'color': 'white'
             },
+            fixed_rows={'headers': True},
+            page_size=20,
+#            row_selectable="multi",
+#            selected_rows=[],
+            style_table={
+                #"overflowY": "auto",
+                "overflowX": "auto",
+                "height": "80vh",
+                "borderRadius": "15px"},
             filter_action="native",
             sort_action="native"
         ),
@@ -114,12 +148,19 @@ html.Div([
                     interval=10000,
                     n_intervals=0
                 )
-    ]),
+    ], className="spb"),
+    html.Div(id="bbbl")
 ], style=CONTENT_STYLE)
 ],
 #    style={'backgroundColor': colors['background'],
 #          'color': colors['text']}
 )
+
+@app.callback(Output('bbbl', 'children'),
+              [Input('table', 'selected_rows')])
+def useless(n):
+    return html.P("hi")
+
 zone = 0
 def call_name_time(fe):
     global zone
@@ -161,26 +202,30 @@ def get_dist(value):
               [Input('drop', 'value')])
 def tab(value):
     if value=='world':
-        return dcc.Tabs(id='tabs-table',
+        return dcc.Dropdown(id='tabs-table',
                         value='All',
-                        children=[
-                            dcc.Tab(label='All', value='All', style=tab_style, selected_style=tab_selected_style),
-                            dcc.Tab(label='Europe', value='Europe', style=tab_style, selected_style=tab_selected_style),
-                            dcc.Tab(label='North America', value='North America', style=s1, selected_style=s2),
-                            dcc.Tab(label='South America', value='South America', style=s1, selected_style=s2),
-                            dcc.Tab(label='Asia', value='Asia', style=tab_style, selected_style=tab_selected_style),
-                            dcc.Tab(label='Africa', value='Africa', style=tab_style, selected_style=tab_selected_style),
-                            dcc.Tab(label='Oceania', value='Oceania', style=tab_style, selected_style=tab_selected_style)
-                        ]
+                        options=[
+                            dict(label='All', value='All'),
+                            dict(label='Europe', value='Europe'),
+                            dict(label='North America', value='North America'),
+                            dict(label='South America', value='South America'),
+                            dict(label='Asia', value='Asia'),
+                            dict(label='Africa', value='Africa'),
+                            dict(label='Oceania', value='Oceania')
+                        ],
+                        searchable=False,
+                        clearable=False
                 )
     else:
         print('gone through')
-        return dcc.Tabs(id='india-tabs',
+        return dcc.Dropdown(id='india-tabs',
                         value='Districts',
-                        children=[
-                            dcc.Tab(label='States', value='States', style=tab_style, selected_style=tab_selected_style),
-                            dcc.Tab(label='Districts', value='Districts', style=tab_style, selected_style=tab_selected_style)
-                        ]
+                        options=[
+                            dict(label='States', value='States'),
+                            dict(label='Districts', value='Districts')
+                        ],
+                        searchable=False,
+                        clearable=False
                 )
 
 @app.callback(Output('dropper-ind', 'children'),
@@ -207,7 +252,7 @@ def dop(v1, v2, nernw):
                     id='dhop',
                     options=op,
                     value='Andaman and Nicobar Islands',
-                    style=dict(width='40%')
+                    clearable=False
                 )
     else:
         pass
@@ -381,13 +426,22 @@ def lukeskywalker(i_tabs, i_drop):
         ncols = [{'name': col, 'id': col} for col in df.columns]
         data=list(df.to_dict("records"))
         print(ncols, data)
-        return ncols, data, []
+        return ncols, data, [
+                {
+                    'if': {'row_index': 'odd'},
+                    'backgroundColor': color2
+                },
+            ]
     elif i_tabs == 'Districts':
         df = get_dist(i_drop)
         vst(df)
         data=list(df.to_dict("records"))
         ncols = [{'name':col, 'id':col} for col in df.columns]
         return ncols, data, [
+                {
+                    'if': {'row_index': 'odd'},
+                    'backgroundColor': color2
+                },
                 {
                     'if': {
                         'filter_query': '{Zone} = Red',
@@ -400,14 +454,14 @@ def lukeskywalker(i_tabs, i_drop):
                         'filter_query': '{Zone} = Orange',
                         'columns_id': 'Zone'
                     },
-                    'color': 'orange'
+                    'color': '#FFA500'
                 },
                 {
                     'if': {
                         'filter_query': '{Zone} = Green',
                         'columns_id': 'Zone'
                     },
-                    'color': 'green'
+                    'color': '#66ff00'
                 }
             ]
 
@@ -418,7 +472,7 @@ def lukeskywalker(i_tabs, i_drop):
 def lint1(ur, utp):
     vent = time.time()
     call_name_time(vent)
-    return html.A(id = 'nen', children = [html.Button('Download Data as xlsx')], href = 'http://thunder2020.pythonanywhere.com/table/corona-report/urlToDownload?value={}'.format(str(vent)))
+    return dbc.Button('Download Data as xlsx', href = 'http://thunder2020.pythonanywhere.com/table/corona-report/urlToDownload?value={}'.format(str(vent)), color="dark", id="nen")
 
 @app.callback(Output('name88', 'children'),
             [Input('india-tabs', 'value'),
@@ -426,7 +480,7 @@ def lint1(ur, utp):
 def lint2(ur2, utp2):
     vent = time.time()
     call_name_time(vent)
-    return html.A(id = 'nen2', children = [html.Button('Download Data as xlsx')], href = 'http://thunder2020.pythonanywhere.com/table/corona-report/urlToDownload?value={}'.format(str(vent)))
+    return dbc.Button('Download Data as xlsx', href = 'http://thunder2020.pythonanywhere.com/table/corona-report/urlToDownload?value={}'.format(str(vent)), color="dark", id="nen2")
 
 
 def r():
@@ -449,6 +503,7 @@ def ex():
 #        'Content-Disposition': 'attachment; filename=output.xlsx'
 #    }
     return Response(w, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", direct_passthrough=True)
+app.index_string = extras.ind_str
 app.title = 'Corona Tracker'
 
 if __name__ == '__main__':

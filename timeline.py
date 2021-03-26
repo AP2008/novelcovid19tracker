@@ -3,7 +3,7 @@ from web_scrape import *
 from sidebar import *
 import extras
 
-external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme]
 
 colors = {
     'background': '#111111',
@@ -1275,13 +1275,13 @@ app = dash.Dash(__name__,
                 requests_pathname_prefix='/timeline/'
      )
 CONTENT_STYLE = {
-    "margin-left": "18rem",
+    "margin-left": "2rem",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
 }
 
 app.layout = html.Div([
-    navbar("Timeline"),
+        navbar("Timeline"),
 html.Div([
     html.Div(id = 'Fe_He', children=[
         dcc.DatePickerRange(
@@ -1310,7 +1310,7 @@ html.Div([
             interval=5000,
             n_intervals=0
         )
-    ], className='six columns')],
+    ], className='box')],
 style=CONTENT_STYLE)
   ]#,
 )
@@ -1374,17 +1374,17 @@ def plot_bar(val, n, start, end):
     fig.add_trace(go.Scatter(x=dfc['Date'][start_index:end_index], y=dfr['Cases'][start_index:end_index], name='Recoveries'),1,2)
     fig.add_trace(go.Bar(x=dfc['Date'][start_index:end_index], y=dfc['Cases'][start_index:end_index], name='Confirmed Cases'),2,1)
     fig.add_trace(go.Scatter(x=dfc['Date'][start_index:end_index], y=dfc['Cases'][start_index:end_index], name='Confirmed Cases'),2,1)
-    fig.update_layout(showlegend=True,
+    fig.update_layout(showlegend=False,
                       legend=dict(
                           font=dict(
                               color="white"
                           )
                       ),
-                      width=1000, height=500,
+#                      width=1000, height=500,
                       margin=dict(
                       l=0,
                       r=0,
-                      b=15,
+#                      b=15,
                       t=0,
                       pad=0
                             ),
@@ -1399,7 +1399,25 @@ def plot_bar(val, n, start, end):
     fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'))
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
     return fig
-
+app.index_string = """<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>"""
 app.title = 'Corona Tracker'
 if __name__ == '__main__':
     app.run_server(debug=False)

@@ -1353,26 +1353,19 @@ def plot_bar(val, n, start, end):
     start_index = datesF.index((int(start[0]), int(start[1]), int(start[2])))
     end_index = datesF.index((int(end[0]), int(end[1]), int(end[2]))) + 1
     print(start_index, end_index)
-    URL = 'https://api.covid19api.com/total/dayone/country/' + val + '/status/confirmed'
-    page = requests.get(URL, verify=False)
+    page = requests.get('https://api.covid19api.com/total/dayone/country/' + val)
     dfc = pd.DataFrame.from_dict(page.json())
-    URL = 'https://api.covid19api.com/total/dayone/country/' + val + '/status/recovered'
-    page = requests.get(URL, verify=False)
-    dfr = pd.DataFrame.from_dict(page.json())
-    URL = 'https://api.covid19api.com/total/dayone/country/' + val + '/status/deaths'
-    page = requests.get(URL, verify=False)
-    dfd = pd.DataFrame.from_dict(page.json())
     fig = ms(rows = 2, cols=2,
         specs=[[{}, {}],
                [{"colspan": 2}, None]],
     )
     print(len(dfc['Date']))
-    fig.add_trace(go.Bar(x=dfc['Date'][start_index:end_index], y=dfd['Cases'][start_index:end_index], name='Deaths'),1,1)
-    fig.add_trace(go.Scatter(x=dfc['Date'][start_index:end_index], y=dfd['Cases'][start_index:end_index], name='Deaths'),1,1)
-    fig.add_trace(go.Bar(x=dfc['Date'][start_index:end_index], y=dfr['Cases'][start_index:end_index], name='Recoveries'),1,2)
-    fig.add_trace(go.Scatter(x=dfc['Date'][start_index:end_index], y=dfr['Cases'][start_index:end_index], name='Recoveries'),1,2)
-    fig.add_trace(go.Bar(x=dfc['Date'][start_index:end_index], y=dfc['Cases'][start_index:end_index], name='Confirmed Cases'),2,1)
-    fig.add_trace(go.Scatter(x=dfc['Date'][start_index:end_index], y=dfc['Cases'][start_index:end_index], name='Confirmed Cases'),2,1)
+    fig.add_trace(go.Bar(x=dfc['Date'][start_index:end_index], y=dfc['Deaths'][start_index:end_index], name='Deaths'),1,1)
+    fig.add_trace(go.Scatter(x=dfc['Date'][start_index:end_index], y=dfc['Deaths'][start_index:end_index], name='Deaths'),1,1)
+    fig.add_trace(go.Bar(x=dfc['Date'][start_index:end_index], y=dfc['Recovered'][start_index:end_index], name='Recoveries'),1,2)
+    fig.add_trace(go.Scatter(x=dfc['Date'][start_index:end_index], y=dfc['Recovered'][start_index:end_index], name='Recoveries'),1,2)
+    fig.add_trace(go.Bar(x=dfc['Date'][start_index:end_index], y=dfc['Confirmed'][start_index:end_index], name='Confirmed Cases'),2,1)
+    fig.add_trace(go.Scatter(x=dfc['Date'][start_index:end_index], y=dfc['Confirmed'][start_index:end_index], name='Confirmed Cases'),2,1)
     fig.update_layout(showlegend=False,
                       legend=dict(
                           font=dict(

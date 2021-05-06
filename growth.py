@@ -1416,7 +1416,7 @@ def drop2_c(val):
         k = pd.read_csv("https://api.covid19india.org/csv/latest/district_wise.csv")
         s = list(k.loc[k["State"] == val]["District"])
         s.sort()
-        return [{'label': x, 'value': x} for x in s], s[-1]
+        return [{'label': x, 'value': x} for x in s], s[0]
     else:
         raise PreventUpdate
 
@@ -1503,13 +1503,6 @@ def glob_plot(value):
     recovered_diff = get_range(dfc['Recovered'])
     dfa = pd.DataFrame(dfc['Confirmed'] - (dfc['Deaths'] + dfc['Recovered']))
     active_diff = get_range(dfa[dfa.columns[0]])
-#    confirmed_diff = get_range(dfc['Cases'])
-#    dfd = get_df(value, 'deaths')
-#    deaths_diff = get_range(dfd['Cases'])
-#    dfr = get_df(value, 'recovered')
-#    recovered_diff = get_range(dfr['Cases'])
-#    dfa = pd.DataFrame(dfc['Cases'] - (dfd['Cases'] + dfr['Cases']))
-#    active_diff = get_range(dfa[dfa.columns[0]])
     fig = plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, [])
     return fig
 

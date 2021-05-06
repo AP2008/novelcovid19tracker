@@ -1450,7 +1450,7 @@ def plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, active_diff):
                       ),
                       plot_bgcolor='#2B3E50',
                       paper_bgcolor='#2B3E50')
-    fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'), rangeslider_visible=True)
+    fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'))
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
     return fig
 

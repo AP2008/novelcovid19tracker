@@ -1302,9 +1302,6 @@ app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
                 requests_pathname_prefix='/growth/')
 CONTENT_STYLE = {
-#    "margin-left": "18rem",
-#    "margin-right": "2rem",
-#    "padding": "2rem 1rem",
 }
 app.layout = html.Div([
     navbar("Growth"),
@@ -1356,9 +1353,6 @@ def updip(r):
     h = n['ISO2'].values.tolist().index(s)
     c = slugs[h]
     return c, []
-#    else:
-#        print(nhj)
-#        return nhj
 
 @app.callback([Output("net", "children"), Output("net2", "style")],
         [Input("drop", "value")])
@@ -1447,8 +1441,6 @@ def plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, active_diff):
                               color="white"
                           )
                       ),
-#                      width=1000,
-#                      height=500,
                       margin=dict(
                           l=5,
                           r=0,
@@ -1480,8 +1472,6 @@ def drop3_c(val, val2, val3, val4):
         recovered_diff = get_range(list(rdf))
         adf = list(rows["Confirmed"] - (rows["Recovered"] + rows["Deceased"]))
         active_diff = get_range(adf)
-        #dates = list(map(lambda x: tuple(map(int, x.split("-"))), list(rows["Date"][1:])))
-        #print(dates[0:5])
         fig = plot_data(list(rows["Date"]), confirmed_diff, deaths_diff, recovered_diff, active_diff)
     elif ctx == "drop":
         fig = glob_plot(val2)
@@ -1517,14 +1507,6 @@ def glob_plot(value):
     active_diff = get_range(dfa[dfa.columns[0]])
     fig = plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, active_diff)
     return fig
-
-#@app.callback(Output('graph', 'figure'),
-#              [Input('drop', 'value')])
-#               #Input('interval_component', 'n_intervals')])
-#def plot(value):
-#    fig = glob_plot(value)
-#
-#    return fig
 
 
 app.index_string = extras.ind_str

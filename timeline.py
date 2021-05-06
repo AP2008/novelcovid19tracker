@@ -1276,8 +1276,7 @@ app = dash.Dash(__name__,
      )
 CONTENT_STYLE = {
     "margin-left": "1rem",
-    "margin-right": "1rem",
-#    "padding": "2rem 1rem",
+    "margin-right": "1rem"
 }
 
 app.layout = html.Div([
@@ -1312,7 +1311,7 @@ html.Div([
         )
     ], className='box')],
 style=CONTENT_STYLE)
-  ]#,
+  ]
 )
 
 @app.callback(Output('Fe_He', 'children'),
@@ -1380,22 +1379,13 @@ def plot_bar(val, n, start, end):
                               color="white"
                           )
                       ),
-#                      width=1000, height=500,
                       margin=dict(
                       l=0,
                       r=0,
-#                      b=15,
                       t=0,
                       pad=0
                             ),
-                      # plot_bgcolor='#111111',
                       paper_bgcolor='#2B3E50')
-                      # title={
-                          # 'text': f"COVID 19 DATA OF {val} IN 2020",
-                          # 'y':0.9,
-                          # 'x':0.5,
-                          # 'xanchor': 'center',
-                          # 'yanchor': 'bottom', 'font':{'color':'white'}})
     fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'))
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
     return fig

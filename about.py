@@ -19,7 +19,6 @@ app = dash.Dash(__name__,
 CONTENT_STYLE = {
     "margin-left": "1rem",
     "margin-right": "1rem",
-#    "padding":"5rem 5rem",
     'color': '#FFFFFF'
 }
 

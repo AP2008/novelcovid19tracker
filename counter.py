@@ -27,12 +27,11 @@ l = d_c
 count = []
 for x, y in zip(d_c["Country"], d_c["Slug"]):
     count.append({'label':x, 'value':y})
+
 CONTENT_STYLE = {
-#    "margin-left": "18rem",
-#    "margin-right": "2rem",
-#    "padding": "2rem 1rem",
     'color': '#FFFFFF'
 }
+
 app.layout = html.Div([
     navbar("Counter"),
     dbc.Row([
@@ -104,8 +103,7 @@ app.layout = html.Div([
         ], width=12, lg=6)
     ])
 ],
-style=CONTENT_STYLE,
-#         'backgroundColor': colors['background'],
+style=CONTENT_STYLE
 )
 
 @app.callback([Output('ccii', 'value'),

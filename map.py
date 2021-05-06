@@ -13,7 +13,6 @@ colors = {
 CONTENT_STYLE = {
     "margin-left": "1rem",
     "margin-right": "1rem"
-#    "padding": "2rem 1rem",
 }
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
@@ -34,15 +33,11 @@ app.layout = html.Div(children=[
         html.Div([
             dbc.Spinner(
                 dcc.Graph(id='map',
-#                          config={
-#                              'responsive': True
-#                          },
                           style={
                               'width': '100vw',
                               'height': '80vh',
                               'overflowY': True
                           }
-                          # figure=init()
                 )
             ),
             dcc.Interval(
@@ -79,31 +74,16 @@ def map(n, drop_val):
         states = list(df['State'])
         cases = list(df['Confirmed'].map(int))
 
-
-#        jdata = json.loads(listed.k)
-#
-#        i = 1
-#        for feature in jdata['features']:
-#            feature['id'] = i
-#            i+=1
-
-#        states2 = []
-#        x = 0
-#        print(states)
-#        for y in range(len(jdata['features'])):
-#            states2.append(jdata['features'][x]['properties']['st_nm'])
-#            x+=1
-
         dictionary = {}
         x = 0
         for y in states:
             dictionary[y] = cases[x]
             x+=1
-#        locations = [x+1 for x in range(len(states2))]
+
         z = []
         text = []
         df.index = df[new_cols[0]]
-#        for x in states2:
+
         for x in states:
             print(x, x in list(states))
             state = x
@@ -121,9 +101,6 @@ def map(n, drop_val):
                     + '<br> Deceased: ' + str(0)
                     + '<br> Active: ' + str(0))
                 z.append(0)
-
-#        mapboxt = 'pk.eyJ1IjoiYXIyMDA4IiwiYSI6ImNrOHduZGx2dzBjYTczZnFvNXE4dW5odjkifQ.xQGBYsA7sBziM2gfj9CrmA'
-
 
         trace = go.Choropleth(z=z,
                                     featureidkey='properties.ST_NM',
@@ -189,11 +166,9 @@ def map(n, drop_val):
                     + '<br> New Deaths: ' + str(single_list(dfData.loc[i]['new_deaths'])))
         fig = go.Figure(data=go.Choropleth(locations=locations, z=z, colorscale='Reds', text=text, hoverinfo='text'))
         fig.update_traces(showscale=False)
-#        fig = go.Figure(data=go.Choropleth(locations=locations, z=z, text=text, hoverinfo='text'))
         fig.update_layout(#autosize=True,
                                          plot_bgcolor='#2B3E50',
                                          paper_bgcolor='#2B3E50',
-#                title_text='Choropleth Map of Confirmed Covid-19 cases'#,
                 margin={"r":0,"t":0,"l":0,"b":0}
         )
         return fig

@@ -10,9 +10,6 @@ colors = {
 }
 
 CONTENT_STYLE = {
-#    "margin-left": "1rem",
-#    "margin-right": "1rem",
-#    "padding": "2rem 1rem",
     'color': '#FFFFFF'
 }
 

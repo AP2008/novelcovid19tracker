@@ -47,8 +47,7 @@ s2 = {
 
 CONTENT_STYLE = {
     "margin-left": "1rem",
-    "margin-right": "1rem",
-    #"padding": "2rem 1rem",
+    "margin-right": "1rem"
 }
 external_stylesheets = [extras.theme]
 
@@ -109,7 +108,6 @@ html.Div([
             page_current=0,
             page_size=20,
             style_table={
-                #"overflowY": "auto",
                 "overflowX": "auto",
                 "height": "80vh",
                 "borderRadius": "15px"},
@@ -133,10 +131,7 @@ html.Div([
             },
             fixed_rows={'headers': True},
             page_size=20,
-#            row_selectable="multi",
-#            selected_rows=[],
             style_table={
-                #"overflowY": "auto",
                 "overflowX": "auto",
                 "height": "80vh",
                 "borderRadius": "15px"},
@@ -151,9 +146,7 @@ html.Div([
     ], className="spb"),
     html.Div(id="bbbl")
 ], style=CONTENT_STYLE)
-],
-#    style={'backgroundColor': colors['background'],
-#          'color': colors['text']}
+]
 )
 
 @app.callback(Output('bbbl', 'children'),
@@ -235,7 +228,6 @@ def tab(value):
 def dop(v1, v2, nernw):
     if v1 == 'india' and v2 == 'Districts':
         op = []
-        ###############################
         lst =  ['Andaman and Nicobar Islands', 'Andhra Pradesh',
         'Arunachal Pradesh', 'Assam', 'Bihar', 'Chandigarh',
         'Chhattisgarh', 'Delhi',
@@ -308,111 +300,14 @@ def hansolo(val, value, nwemmw):
         df2 = df2.drop("Continent", axis=1)
         columns = [{'name':col, 'id':col} for col in df2.columns]
         return columns, data
-    """
-    if value == 'world':
-        URL = "https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv"
-        df2 = pd.read_csv(URL)
-        country2 = list(df2['COUNTRY'])
-        r = 0
-        for i in country2:
-            if i =='"Bahamas, The"':
-                country2[r] = 'Bahamas'
-            elif i == '"Congo, Democratic Republic of the"':
-                country2[r] = 'DRC'
-            elif i == '"Congo, Republic of the"':
-                country2[r] = 'Congo'
-            elif i == '"Gambia, The"':
-                country2[r] = 'Gambia'
-            elif i == '"Korea, North"':
-                country2[r] = 'North Korea'
-            elif i == '"Korea, South"':
-                country2[r] = 'S. Korea'
-            elif i == 'Virgin Islands':
-                country2[r] = 'British Virgin Islands'
-            elif i == 'United States':
-                country2[r] = 'USA'
-            elif i == 'United Kingdom':
-                country2[r] = 'UK'
-            elif i == 'United Arab Emirates':
-                country2[r] = 'UAE'
-            elif i == 'Saint Vincent and the Grenadines':
-                country2[r] = 'St. Vincent Grenadines'
-            elif i == 'Saint Pierre and Miquelon':
-                country2[r] = 'Saint Pierre Miquelon'
-            r+=1
-        url = "https://www.worldometers.info/coronavirus/#countries"
-
-        web_content = requests.get(url, verify=False).content
-        # parse the html content
-        soup = bs(web_content, "html.parser")
-        # remove any newlines and extra spaces from left and right
-        extract_contents = lambda row: [x.text.replace('\n', '') for x in row]
-        # find all table rows and data cells within
-        stats = []
-        all_rows = soup.find_all('tr')
-        for row in all_rows:
-            stat = extract_contents(row.find_all('td'))
-            if len(stat) == 19:
-                  stats.append(stat)
-        ncols = [
-            "SR no.", "Country", "Cases", "New Cases", "Deaths", "New Deaths",
-            "Recoveries", "New Recoveries", "Active", "Serious", "Cases/1M pop",
-            "Deaths/1M pop", "Total Tests", "Tests/1M pop", "Population", "Continent", "1 case every X ppl",
-            "1 Death every X ppl", "1 Test every X ppl"]
-        df = pd.DataFrame(data=stats, columns=ncols)
-        ndf = df
-        country = list(ndf['Country'])
-        ncountry = []
-        x = 0
-        for i in country:
-            if i not in country2:
-                ncountry.append(x)
-            x+=1
-        vdf = ndf.drop(ncountry)
-        vdf.drop_duplicates(subset ="Country", keep = 'last', inplace = True)
-        ndf=vdf
-        ndf['Cases'] = ndf['Cases'].str.replace(',','')
-        ndf['Cases'] = ndf['Cases'].apply(pd.to_numeric)
-        ndf['Continent'] = ndf['Continent'].str.replace('Australia/Oceania', 'Oceania')
-        vst(df)
-        ls = [vdf[x] for x in ncols]
-        ncols = [{'name': col, 'id': col} for col in vdf.columns]
-        data=vdf.to_dict(orient = 'records')
-        index = [x for x in range(len(list(vdf['Country'])))]
-        def fun(val, ndf):
-            asia = []
-            x=0
-            for i in ndf['Continent']:
-                if i == val:
-                    asia.append(x)
-                x+=1
-            ndf = ndf.reset_index()
-            dec = list(range(len(ndf['Country'])))
-            diff = list(set(dec) - set(asia))
-            ndf = ndf.drop('index', axis=1)
-            data1 = ndf.drop(diff)
-            return data1
-        if val != 'All':
-            data1 = fun(val, ndf)
-            data = data1.to_dict(orient='records')
-            vst(data1)
-
-        return ncols, data #, {'display':'none'}, {'display':'block'}
-        """
-
-
-
 
 
 @app.callback([Output('tablet', 'columns'),
             Output('tablet', 'data'),
             Output('tablet', 'style_data_conditional')],
-#            Output('table_div', 'style')],
             [Input('india-tabs', 'value'),
             Input('dhop', 'value')])
-def lukeskywalker(i_tabs, i_drop):
-    # print('hell " o ')
-    # return [1,2,3], [1,2,3]
+def f1(i_tabs, i_drop):
     print('entered')
     print(i_tabs)
     if i_tabs == 'States':
@@ -504,10 +399,6 @@ def ex():
     excel_writer.close()
     strIO.seek(0)
     w = FileWrapper(strIO)
-    #file_wrapper = FileWrapper(excel_writer)
-#    headers = {
-#        'Content-Disposition': 'attachment; filename=output.xlsx'
-#    }
     resp = Response(w, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", direct_passthrough=True)
     resp.headers["Content-Disposition"] = f"attachment; filename=\"{FILENAME}\""
     return resp

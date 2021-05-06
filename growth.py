@@ -1266,7 +1266,7 @@ ddc = []
 for i, country in enumerate(countries):
     ddc.append({'label': country, 'value': slugs[i]})
 
-def get_df(country: str, case_type: str) -> pd.DataFrame:
+def get_df(country: str) -> pd.DataFrame:
     url = 'https://api.covid19api.com/total/dayone/country/' + country
     page = requests.get(url, verify=False)
     df = pd.DataFrame.from_dict(page.json())

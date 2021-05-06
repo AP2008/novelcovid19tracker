@@ -10,16 +10,16 @@ colors = {
 }
 
 CONTENT_STYLE = {
-    "margin-left": "2rem",
-    "margin-right": "2rem",
-    "padding": "2rem 1rem",
+#    "margin-left": "1rem",
+#    "margin-right": "1rem",
+#    "padding": "2rem 1rem",
     'color': '#FFFFFF'
 }
 
 def make_jumbo(title, text, button_name, hre):
     return dbc.Jumbotron(
         [
-            html.H1(title, className="display-3"),
+            html.H2(title, className="display-4"),
             html.P(text),
             dbc.Button(button_name, color="primary", href=hre, size="lg")
         ])
@@ -84,11 +84,11 @@ People most at risk will be prioritized.
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
-                requests_pathname_prefix='/infocentre/'
+                requests_pathname_prefix="/infocenter/"
                 )
 
 app.layout = html.Div([
-    html.Div([navbar("Infocenter")]),
+    navbar("Infocenter"),
     dbc.Row([
         dbc.Col(html.Div(what_is_covid), width=12, lg=6),
         dbc.Col(html.Div(covid_symptoms), width=12, lg=6),
@@ -96,26 +96,7 @@ app.layout = html.Div([
         dbc.Col(html.Div(covid_vaccine), width=12, lg=6)
     ])
 ],
-style=CONTENT_STYLE,
-className="row")
+style=CONTENT_STYLE)
 
-app.index_string = """<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
-</html>"""
+app.index_string = extras.ind_str
 app.title = 'Corona Tracker'

@@ -8,6 +8,8 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from sidebar import *
 import extras
+import time
+from dash.exceptions import PreventUpdate
 #from dash_defer_js_import import Import
 
 pt = True
@@ -1307,16 +1309,27 @@ CONTENT_STYLE = {
 app.layout = html.Div([
     navbar("Growth"),
     html.Div([
-        dcc.Interval(
-            id="ic",
-            interval=20000,
-            n_intervals=0
+        html.Div([
+            dcc.Interval(
+                id="ic",
+                interval=20000,
+                n_intervals=0
+            )],
+            id="temp"
         ),
         dcc.Dropdown(
             id = 'drop',
             options = ddc,
             style=dict(width='100%'),
         ),
+        html.Div([
+            dcc.Dropdown(id="ind_drop")],
+            id='net'),
+        html.Div([
+            dcc.Dropdown(id="drop2"),
+            dcc.Dropdown(id="drop3"),
+            dcc.Dropdown(id="drop4")],
+            id='net2'),
         html.Div([
             dcc.Graph(
                 id='graph'
@@ -1330,37 +1343,91 @@ app.layout = html.Div([
     ])
 ])
 
-@app.callback(Output("drop", "value"),
+
+
+@app.callback([Output("drop", "value"), Output("temp", "children")],
         [Input("ic", "n_intervals")])
 def updip(r):
     global pt
     s = extras.getip()
     print(pt)
-    if pt != s:
-        pt = s
-        print("PT: ", pt)
-        h = n['ISO2'].values.tolist().index(s)
-        c = slugs[h]
-        return c
-    else:
-        print(nhj)
-        return nhj
+    pt = s
+    print("PT: ", pt)
+    h = n['ISO2'].values.tolist().index(s)
+    c = slugs[h]
+    return c, []
+#    else:
+#        print(nhj)
+#        return nhj
 
-@app.callback(Output('graph', 'figure'),
-              [Input('drop', 'value'),
-               Input('interval_component', 'n_intervals')])
-def plot(value, n):
-    global nhj
-    nhj = value
-    dfc = get_df(value, 'confirmed')
-    dates = dfc['Date']
-    confirmed_diff = get_range(dfc['Cases'])
-    dfd = get_df(value, 'deaths')
-    deaths_diff = get_range(dfd['Cases'])
-    dfr = get_df(value, 'recovered')
-    recovered_diff = get_range(dfr['Cases'])
-    dfa = pd.DataFrame(dfc['Cases'] - (dfd['Cases'] + dfr['Cases']))
-    active_diff = get_range(dfa[dfa.columns[0]])
+@app.callback([Output("net", "children"), Output("net2", "style")],
+        [Input("drop", "value")])
+def net_c(val):
+    if val == "india":
+        return [
+            dcc.Dropdown(
+                id="ind_drop",
+                options=[
+                    {'label': 'Districts', 'value': 'district'},
+                    {'label': 'State', 'value': 'state'}],
+                value="state")], {'display': 'block'}
+    else:
+        return [], {'display': 'none'}
+
+@app.callback(Output("net2", "children"),
+        [Input("ind_drop", "value")])
+def net2_c(val):
+    k = pd.read_csv("https://api.covid19india.org/csv/latest/district_wise.csv")
+    states = list(set(k["State"]))
+    states.sort()
+    s = list(k.loc[k["State"] == "Andhra Pradesh"]["District"])
+    s.sort()
+    if val == "state":
+        return [
+            dcc.Dropdown(
+                id="drop4",
+                options=[{'label': x, 'value': x} for x in states] + [{'label': 'All', 'value': 'all'}],
+                value="all", style={"display": "block"}),
+            dcc.Dropdown(
+                id="drop2",
+                options=[{'label': x, 'value': x} for x in states],
+                value="Andhra Pradesh", style={"display": "none"}),
+            dcc.Dropdown(
+                id="drop3",
+                options=[{'label': x, 'value': x} for x in s],
+                value=s[0], style={"display": "none"}
+            )
+        ]
+    elif val=="district":
+        return [
+            dcc.Dropdown(
+                id="drop4",
+                options=[{'label': x, 'value': x} for x in states],
+                value="Andhra Pradesh", style={"display": "none"}),
+            dcc.Dropdown(
+                id="drop2",
+                options=[{'label': x, 'value': x} for x in states],
+                value="Andhra Pradesh", style={"display": "block"}),
+            dcc.Dropdown(
+                id="drop3",
+                options=[{'label': x, 'value': x} for x in s],
+                value=s[0], style={"display": "block"}
+            )
+        ]
+
+@app.callback([Output("drop3", "options"), Output("drop3", "value")],
+            [Input("drop2", "value")])
+def drop2_c(val):
+    if val:
+        k = pd.read_csv("https://api.covid19india.org/csv/latest/district_wise.csv")
+        s = list(k.loc[k["State"] == val]["District"])
+        s.sort()
+        return [{'label': x, 'value': x} for x in s], s[-1]
+    else:
+        raise PreventUpdate
+
+
+def plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, active_diff):
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(x=dates, y=confirmed_diff, name='New Cases', line=dict(color='orange'))
@@ -1393,32 +1460,74 @@ def plot(value, n):
                       paper_bgcolor='#2B3E50')
     fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'), rangeslider_visible=True)
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
+    return fig
+
+@app.callback(Output('graph', 'figure'),
+            [Input("drop3", "value"), Input("drop", "value"), Input("drop4", "value"), Input("drop2", "value")])
+def drop3_c(val, val2, val3, val4):
+    ctx = dash.callback_context.triggered[0]['prop_id'].split('.')[0]
+    print("{}: {}", ctx, [val, val2, val3, val4])
+    if ctx == "drop3":
+        k = pd.read_csv("https://api.covid19india.org/csv/latest/districts.csv")
+        row = k.loc[k["State"] == val4]
+        rows = row.loc[row["District"] == val]
+        cdf = rows["Confirmed"]
+        confirmed_diff = get_range(list(cdf))
+        #print(confirmed_diff)
+        ddf = list(rows["Deceased"])
+        deaths_diff = get_range(list(ddf))
+        rdf = list(rows["Recovered"])
+        recovered_diff = get_range(list(rdf))
+        adf = list(rows["Confirmed"] - (rows["Recovered"] + rows["Deceased"]))
+        active_diff = get_range(adf)
+        #dates = list(map(lambda x: tuple(map(int, x.split("-"))), list(rows["Date"][1:])))
+        #print(dates[0:5])
+        fig = plot_data(list(rows["Date"]), confirmed_diff, deaths_diff, recovered_diff, active_diff)
+    elif ctx == "drop":
+        fig = glob_plot(val2)
+    elif ctx == "drop4":
+        if val3 == "all":
+            fig = glob_plot("india")
+        else:
+            k = pd.read_csv("https://api.covid19india.org/csv/latest/states.csv")
+            rows = k.loc[k["State"] == val3]
+            cdf = rows["Confirmed"]
+            confirmed_diff = get_range(list(cdf))
+            ddf = list(rows["Deceased"])
+            deaths_diff = get_range(list(ddf))
+            rdf = list(rows["Recovered"])
+            recovered_diff = get_range(list(rdf))
+            adf = list(rows["Confirmed"] - (rows["Recovered"] + rows["Deceased"]))
+            active_diff = get_range(adf)
+            fig = plot_data(list(rows["Date"]), confirmed_diff, deaths_diff, recovered_diff, active_diff)
 
     return fig
 
+def glob_plot(value):
+    global nhj
+    nhj = value
+    dfc = get_df(value, 'confirmed')
+    dates = dfc['Date']
+    confirmed_diff = get_range(dfc['Cases'])
+    dfd = get_df(value, 'deaths')
+    deaths_diff = get_range(dfd['Cases'])
+    dfr = get_df(value, 'recovered')
+    recovered_diff = get_range(dfr['Cases'])
+    dfa = pd.DataFrame(dfc['Cases'] - (dfd['Cases'] + dfr['Cases']))
+    active_diff = get_range(dfa[dfa.columns[0]])
+    fig = plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, active_diff)
+    return fig
 
-app.index_string = """<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
-</html>"""
+#@app.callback(Output('graph', 'figure'),
+#              [Input('drop', 'value')])
+#               #Input('interval_component', 'n_intervals')])
+#def plot(value):
+#    fig = glob_plot(value)
+#
+#    return fig
+
+
+app.index_string = extras.ind_str
 app.title = 'Corona Tracker'
 
 if __name__ == '__main__':

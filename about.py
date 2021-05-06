@@ -14,12 +14,12 @@ sn = {'color':'white'}
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
-                requests_pathname_prefix='/aboutme/')
+                requests_pathname_prefix='/about/')
 
 CONTENT_STYLE = {
-    "margin-left": "2rem",
-    "margin-right": "2rem",
-    "padding": "5rem 5rem",
+    "margin-left": "1rem",
+    "margin-right": "1rem",
+#    "padding":"5rem 5rem",
     'color': '#FFFFFF'
 }
 
@@ -52,25 +52,7 @@ app.layout = html.Div([
     ])
 ], style=CONTENT_STYLE)
 
-app.index_string = """<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
-</html>"""
+app.index_string = extras.ind_str
 app.title="Corona Tracker"
 
 if __name__ == '__main__':

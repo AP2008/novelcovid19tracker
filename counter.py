@@ -2,7 +2,7 @@ from modules import *
 from sidebar import *
 import extras
 
-external_stylesheets = [extras.theme, 'https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [extras.theme]
 
 colors = {
     'background': '#111111',
@@ -28,108 +28,84 @@ count = []
 for x, y in zip(d_c["Country"], d_c["Slug"]):
     count.append({'label':x, 'value':y})
 CONTENT_STYLE = {
-    "margin-left": "18rem",
-    "margin-right": "2rem",
-    "padding": "2rem 1rem",
+#    "margin-left": "18rem",
+#    "margin-right": "2rem",
+#    "padding": "2rem 1rem",
     'color': '#FFFFFF'
 }
 app.layout = html.Div([
-    html.Div([
-        navbar("Counter")
-    ]),
-    html.Div([
-        html.H4("COVID19 CASES WORLDWIDE"),
-        daq.LEDDisplay(
-            id='ccii',
-            value=value1,
-            color='#0066ff',
-            backgroundColor='#0d0d0d',
-            style={'margin-left':'10px'}
-        ),
-        html.H4("COVID19 DEATHS WORLDWIDE"),
-        daq.LEDDisplay(
-            id='cdii',
-            value=value2,
-            color='#0066ff',
-            backgroundColor='#0d0d0d',
-            style={'margin-left':'10px'}
-        ),
-        html.H4("COVID19 RECOVERIES WORLDWIDE"),
-        daq.LEDDisplay(
-            id='crii',
-            value=value3,
-            color='#0066ff',
-            backgroundColor='#0d0d0d',
-            style={'margin-left':'10px'}
-        ),
-        dcc.Interval(
-            id='interval',
-            interval=5000,
-            n_intervals=0
-        ),
-    ], style={'margin-top':'40px'},
-      className='four columns'
-    ),
-    # html.A(html.Button('Home'),
-                      # href='http://127.0.0.1:8080/'),
-    # html.A(html.Button('Bar'),
-                      # href='http://127.0.0.1:8080/bar'),
-    # html.A(html.Button('Pie'),
-                      # href='http://127.0.0.1:8080/pie'),
-    # html.A(html.Button('Map'),
-                      # href='http://127.0.0.1:8080/map'),
-    # html.A(html.Button('Table'),
-                      # href='http://127.0.0.1:8080/table'),
-    # html.Div([
-        # html.H4('COVID 19 DASHBOARD 2020'),
-        # dcc.Graph(id='pie', figure = fig),
-        # dcc.Interval(
-            # id='intv',
-            # interval=10000,
-            # n_intervals=0
-        # )
-    # ], className='four columns'
-    # ),
-    html.Div([
-        dcc.Dropdown(
-            id='drop',
-            options=count,
-            style=dict(width='100%', color='black'),
-            value='india'
-        ),
-        html.H4(id='c', children="COVID19 CASES IN India"),
-        daq.LEDDisplay(
-            id='cv',
-            value=0,
-            color='#0066ff',
-            backgroundColor='#0d0d0d'
-        ),
-        html.H4(id='d', children="COVID19 DEATHS IN India"),
+    navbar("Counter"),
+    dbc.Row([
+        dbc.Col([
+            html.H4("CASES - WORLD"),
+            daq.LEDDisplay(
+                id='ccii',
+                value=value1,
+                color='#FFA500',
+                backgroundColor='#0d0d0d',
+                style={'margin-left':'10px'}
+            ),
+            html.H4("DEATHS - WORLD"),
+            daq.LEDDisplay(
+                id='cdii',
+                value=value2,
+                color='#ae0700',
+                backgroundColor='#0d0d0d',
+                style={'margin-left':'10px'}
+            ),
+            html.H4("RECOVERIES - WORLD"),
+            daq.LEDDisplay(
+                id='crii',
+                value=value3,
+                color='#66ff00',
+                backgroundColor='#0d0d0d',
+                style={'margin-left':'10px'}
+            ),
+            dcc.Interval(
+                id='interval',
+                interval=5000,
+                n_intervals=0
+            )
+        ], width=12, lg=6),
+        dbc.Col([
+            dcc.Dropdown(
+                id='drop',
+                options=count,
+                style=dict(width='100%', color='black'),
+                value='india'
+            ),
+            html.H4(id='c', children="CASES - India"),
+            daq.LEDDisplay(
+                id='cv',
+                value=0,
+                color='#FFA500',
+                backgroundColor='#0d0d0d'
+            ),
+            html.H4(id='d', children="DEATHS - India"),
 
-        daq.LEDDisplay(
-            id='cd',
-            value=0,
-            color='#0066ff',
-            backgroundColor='#0d0d0d'
-        ),
-        html.H4(id='r', children="COVID19 RECOVERIES IN India"),
-        daq.LEDDisplay(
-            id='cr',
-            value=0,
-            color='#0066ff',
-            backgroundColor='#0d0d0d'
-        ),
-        dcc.Interval(
-            id='interval-comp',
-            interval=5000,
-            n_intervals=0
-        )
-    ], className='four columns'
-    )
+            daq.LEDDisplay(
+                id='cd',
+                value=0,
+                color='#ae0700',
+                backgroundColor='#0d0d0d'
+            ),
+            html.H4(id='r', children="RECOVERIES - India"),
+            daq.LEDDisplay(
+                id='cr',
+                value=0,
+                color='#66ff00',
+                backgroundColor='#0d0d0d'
+            ),
+            dcc.Interval(
+                id='interval-comp',
+                interval=300000,
+                n_intervals=0
+            )
+        ], width=12, lg=6)
+    ])
 ],
 style=CONTENT_STYLE,
 #         'backgroundColor': colors['background'],
-  className='row'
 )
 
 @app.callback([Output('ccii', 'value'),
@@ -155,26 +131,8 @@ def func(n):
               )
 def funct(n, val):
     p_l = pd.DataFrame(json.loads(requests.get(URL, verify=False).content)["Countries"]).set_index("Slug")
-    return int(p_l["TotalConfirmed"][val]), int(p_l["TotalDeaths"][val]), int(p_l["TotalRecovered"][val]), 'COVID19 CASES IN '+ val, 'COVID19 DEATHS IN '+ val, 'COVID19 RECOVERIES IN '+val
-app.index_string = """<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
-</html>"""
+    return int(p_l["TotalConfirmed"][val]), int(p_l["TotalDeaths"][val]), int(p_l["TotalRecovered"][val]), 'CASES -  '+ val, 'DEATHS - '+ val, 'RECOVERIES - '+val
+app.index_string = extras.ind_str
 app.title = 'Corona Tracker'
 
 if __name__ == '__main__':

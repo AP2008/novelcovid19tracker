@@ -18,8 +18,8 @@ application = DispatcherMiddleware(home.server, {
     '/map': map.server,
     '/datatable': table.server,
     '/growth': growth.server,
-    '/infocentre': about_covid.server,
-    '/aboutme': about_me.server,
+    '/infocenter': about_covid.server,
+    '/about': about_me.server,
     '/arc-sw.js': arc.app
 })
 

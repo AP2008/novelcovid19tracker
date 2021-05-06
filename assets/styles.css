@@ -1,5 +1,22 @@
+/*
+ .topnav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  transition: top 0.3s;
+}*/
+
 h1 {
+/*    margin: 4.8rem 0 1.68rem 0 !important;*/
     font-size: 8vw;
+}
+
+a.btn.btn-secondary {
+    padding: 0;
+}
+
+.layer.bg rect{
+    fill: #4e5d6c !important;
 }
 
 .nav {
@@ -22,6 +39,11 @@ h1 {
 .sidenav li>a {
     color: white !important;
 }
+
+/*
+.sidenav-overlay {
+    opacity: 0 !important;
+}*/
 
 .sidenav, nav {
     background-color: #3c434a !important;

@@ -73,7 +73,7 @@ def navbar(ap):
                         ], className="nav-wrapper")),
                     html.Ul(
                         Lis, className="sidenav", id="mobile-demo"),
-                    Import(src="https://thunder2020.pythonanywhere.com/assets/nen.js"),
+                    Import(src="https://thunder2020.pythonanywhere.com/assets/nen.js")
         #html.Div([
 #            dbc.NavbarSimple(
 #                navlinks,

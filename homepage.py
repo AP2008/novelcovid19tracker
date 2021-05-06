@@ -13,18 +13,16 @@ app = dash.Dash(__name__,
 CORONA_LOGO = 'https://cdn.cnn.com/cnnnext/dam/assets/200204130938-cdc-coronavirus-illustration-exlarge-169.jpg'
 app.layout = html.Div(children=[
     html.Div(id="PEST"),
+        navbar("Home"),
         html.Div([
-            html.A(href="https://www.addtoany.com/share", className="a2a_dd")],
-            className="a2a_kit a2a_kit_size_32 a2a_default_style"
-        ),
             dbc.Row(
                 dbc.Col(
                     html.Center(html.H1('Corona Tracker', id="n-c"))
-                    #width={'offset': 3.5}
+                    #width={'offset': 3.3}
                 ),
                 no_gutters=True
             ),
-#            dcc.Interval(id="i-c", interval=5*1000, n_intervals=0),
+#            dcc.Interval(id="i-c", interval=3*1000, n_intervals=0),
 #            html.Div([
 #                dbc.Navbar([
 #                    html.A(
@@ -47,14 +45,14 @@ app.layout = html.Div(children=[
             dbc.Row([
                 dbc.Col(
                     dbc.Card([
-#                        html.Iframe(src="https://thunder2020.pythonanywhere.com/timeline", width=500, height=800),
+#                        html.Iframe(src=https://thunder2020.pythonanywhere.com/timeline", width=300, height=800),
                         dbc.Button(dbc.CardImg(src=app.get_asset_url('bar_g.jpg'), className="responsive"), href='https://thunder2020.pythonanywhere.com/timeline'),
                         dbc.CardBody([
                             html.H4('Timeline', style=sn),
                             html.P('The TIMELINE page shows the Covid-19 data of most of the countries as a time-series.', style=sn),
                             dbc.Button('Timeline', color='primary', href='https://thunder2020.pythonanywhere.com/timeline', size='lg')
                         ])
-                    ]), width=12, lg=4),
+                    ], className="z-depth-3"), width=12, lg=4),
                 dbc.Col(
                     dbc.Card([
                         dbc.Button(dbc.CardImg(src=app.get_asset_url('counter_g.jpg'), className="responsive"), href='https://thunder2020.pythonanywhere.com/counter'),
@@ -63,17 +61,17 @@ app.layout = html.Div(children=[
                             html.P('The COUNTER page shows the Worldwide Covid-19 cases, deaths and recoveries. You can also choose a country to show its statistics.', style=sn),
                             dbc.Button('Counter', color='primary', href='https://thunder2020.pythonanywhere.com/counter', size='lg')
                         ])
-                    ])
+                    ], className="z-depth-3")
                 , width=12, lg=4),
                 dbc.Col(
                     dbc.Card([
-                        dbc.Button(dbc.CardImg(src=app.get_asset_url('table_g.jpg'), className="responsive"), href='https://thunder2020.pythonanywhere.com/table'),
+                        dbc.Button(dbc.CardImg(src=app.get_asset_url('table_g.jpg'), className="responsive"), href='https://thunder2020.pythonanywhere.com/datatable'),
                         dbc.CardBody([
                             html.H4('Data Table', style=sn),
                             html.P('The TABLE page shows the COVID-19 data of India district-wise and state-wise. It also shows the World COVID-19 data continent-wise.', style=sn),
                             dbc.Button('Table', color='primary', href='https://thunder2020.pythonanywhere.com/table', size='lg')
                         ])
-                    ]),
+                    ], className="z-depth-3"),
                 width=12, lg=4),
             dbc.Col(
                 dbc.Card([
@@ -83,7 +81,7 @@ app.layout = html.Div(children=[
                         html.P('The MAP page shows a Choropleth map of the confirmed cases in India state-wise and the confirmed cases of most of the countries.', style=sn),
                         dbc.Button('Choropleth Map', color='primary', href='https://thunder2020.pythonanywhere.com/map', size='lg')
                     ])
-                ]),
+                ], className="z-depth-3"),
                 width=12, lg=4),
             dbc.Col(
                 dbc.Card([
@@ -93,20 +91,20 @@ app.layout = html.Div(children=[
                         html.P('The GROWTH page shows the new confirmed , deaths, recoveries and active cases of most of the countries.', style=sn),
                         dbc.Button('Growth', color='primary', href='https://thunder2020.pythonanywhere.com/growth', size='lg')
                     ])
-                ]),
+                ], className="z-depth-3"),
                 width=12, lg=4),
             dbc.Col(
                 dbc.Card([
-                    dbc.Button(dbc.CardImg(src=app.get_asset_url('Infocentre.png'), className="responsive"), href='https://thunder2020.pythonanywhere.com/infocentre'),
+                    dbc.Button(dbc.CardImg(src=app.get_asset_url('Infocentre.png'), className="responsive"), href='https://thunder2020.pythonanywhere.com/infocenter'),
                     dbc.CardBody([
                         html.H4('Infocenter', style=sn),
                         html.P("The INFOCENTER gives information on Covid-19, it's symptoms, vaccination and prevention", style=sn),
                         dbc.Button("Infocenter", color='primary', href='https://thunder2020.pythonanywhere.com/infocentre', size='lg')
                     ])
-                ]),
+                ], className="z-depth-3"),
                 width=12, lg=4)]),
             # dbc.Col(
-                # dbc.Card([
+                # dbc.Card([, className="z-depth-3"
                     # dbc.CardImg(src=app.get_asset_url('counter_g.jpg')),
                     # dbc.CardBody([
                         # html.H4('Counter', style=sn),
@@ -118,7 +116,7 @@ app.layout = html.Div(children=[
             # )
 html.Div([create_cop(app)])
 
-])
+])])
 
 
 
@@ -172,7 +170,7 @@ html.Div([create_cop(app)])
 #        html.Hr(),
 #        daq.LEDDisplay(value=int(c["TotalConfirmed"])),
 #        ], className="alert-dark"))
-#    a2 = dbc.Col(html.Center(html.H1("Corona Tracker", style=sn), style={"padding-top": "25px"}))
+#    a2 = dbc.Col(html.Center(html.H1("Corona Tracker", style=sn), style={"padding-top": "23px"}))
 #    a3 = dbc.Col(dbc.Alert([
 #        html.H4("Total Confirmed Deaths in {}".format(c["Country"].to_list()[0]), className="alert-heading"),
 #        html.Hr(),
@@ -188,7 +186,7 @@ app.index_string = extras.ind_str
 #        <meta name="description" content="This website gives the latest data and visualizations of the Novel Covid 19 Virus.">
 #        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 #        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
-#        <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=60597de1f6067000116b078b&product=sop' async='async'></script>
+#        <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=60397de1f6067000116b078b&product=sop' async='async'></script>
 #        <!-- Global site tag (gtag.js) - Google Analytics -->
 #        <script async src="https://www.googletagmanager.com/gtag/js?id=G-BVFL2XTDQ8"></script>
 #        <script>

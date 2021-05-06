@@ -466,21 +466,27 @@ def lukeskywalker(i_tabs, i_drop):
             ]
 
 
+FILENAME = ""
+
 @app.callback(Output('name99', 'children'),
             [Input('drop', 'value'),
             Input('tabs-table', 'value')])
 def lint1(ur, utp):
+    global FILENAME
+    FILENAME = ur + utp + ".xlsx"
     vent = time.time()
     call_name_time(vent)
-    return dbc.Button('Download Data as xlsx', href = 'http://thunder2020.pythonanywhere.com/table/corona-report/urlToDownload?value={}'.format(str(vent)), color="dark", id="nen")
+    return dbc.Button('Download Data as xlsx', href = 'https://thunder2020.pythonanywhere.com/datatable/corona-report/urlToDownload?value={}'.format(str(vent)), target="_blank", color="dark", id="nen")
 
 @app.callback(Output('name88', 'children'),
             [Input('india-tabs', 'value'),
             Input('dhop', 'value')])
 def lint2(ur2, utp2):
+    global FILENAME
+    FILENAME = ur2 + utp2 + ".xlsx"
     vent = time.time()
     call_name_time(vent)
-    return dbc.Button('Download Data as xlsx', href = 'http://thunder2020.pythonanywhere.com/table/corona-report/urlToDownload?value={}'.format(str(vent)), color="dark", id="nen2")
+    return dbc.Button('Download Data as xlsx', href = 'https://thunder2020.pythonanywhere.com/datatable/corona-report/urlToDownload?value={}'.format(str(vent)), target="_blank", color="dark", id="nen2")
 
 
 def r():
@@ -502,7 +508,9 @@ def ex():
 #    headers = {
 #        'Content-Disposition': 'attachment; filename=output.xlsx'
 #    }
-    return Response(w, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", direct_passthrough=True)
+    resp = Response(w, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", direct_passthrough=True)
+    resp.headers["Content-Disposition"] = f"attachment; filename=\"{FILENAME}\""
+    return resp
 app.index_string = extras.ind_str
 app.title = 'Corona Tracker'
 

@@ -1275,9 +1275,9 @@ app = dash.Dash(__name__,
                 requests_pathname_prefix='/timeline/'
      )
 CONTENT_STYLE = {
-    "margin-left": "2rem",
-    "margin-right": "2rem",
-    "padding": "2rem 1rem",
+    "margin-left": "1rem",
+    "margin-right": "1rem",
+#    "padding": "2rem 1rem",
 }
 
 app.layout = html.Div([
@@ -1399,25 +1399,7 @@ def plot_bar(val, n, start, end):
     fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'))
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
     return fig
-app.index_string = """<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script async src="https://arc.io/widget.min.js#LHbAsxJ6"></script>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
-</html>"""
+app.index_string = extras.ind_str
 app.title = 'Corona Tracker'
 if __name__ == '__main__':
     app.run_server(debug=False)

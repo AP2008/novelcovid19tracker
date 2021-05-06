@@ -1510,7 +1510,7 @@ def glob_plot(value):
 #    recovered_diff = get_range(dfr['Cases'])
 #    dfa = pd.DataFrame(dfc['Cases'] - (dfd['Cases'] + dfr['Cases']))
 #    active_diff = get_range(dfa[dfa.columns[0]])
-    fig = plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, active_diff)
+    fig = plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, [])
     return fig
 
 

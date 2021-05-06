@@ -1267,7 +1267,7 @@ for i, country in enumerate(countries):
     ddc.append({'label': country, 'value': slugs[i]})
 
 def get_df(country: str, case_type: str) -> pd.DataFrame:
-    url = 'https://api.covid19api.com/total/dayone/country/' + country + '/status/' + case_type
+    url = 'https://api.covid19api.com/total/dayone/country/' + country
     page = requests.get(url, verify=False)
     df = pd.DataFrame.from_dict(page.json())
     dates = df['Date'].values.tolist()
@@ -1284,7 +1284,7 @@ def get_df(country: str, case_type: str) -> pd.DataFrame:
         datesF.append((a, b, c))
 
     df = df.reset_index()
-    df = df[['Cases', 'Date']]
+    df = df[['Confirmed', 'Recovered', 'Deaths', 'Date']]
 
     return df
 
@@ -1496,15 +1496,20 @@ def drop3_c(val, val2, val3, val4):
 def glob_plot(value):
     global nhj
     nhj = value
-    dfc = get_df(value, 'confirmed')
+    dfc = get_df(value)
     dates = dfc['Date']
-    confirmed_diff = get_range(dfc['Cases'])
-    dfd = get_df(value, 'deaths')
-    deaths_diff = get_range(dfd['Cases'])
-    dfr = get_df(value, 'recovered')
-    recovered_diff = get_range(dfr['Cases'])
-    dfa = pd.DataFrame(dfc['Cases'] - (dfd['Cases'] + dfr['Cases']))
+    confirmed_diff = get_range(dfc['Confirmed'])
+    deaths_diff = get_range(dfc['Deaths'])
+    recovered_diff = get_range(dfc['Recovered'])
+    dfa = pd.DataFrame(dfc['Confirmed'] - (dfc['Deaths'] + dfc['Recovered']))
     active_diff = get_range(dfa[dfa.columns[0]])
+#    confirmed_diff = get_range(dfc['Cases'])
+#    dfd = get_df(value, 'deaths')
+#    deaths_diff = get_range(dfd['Cases'])
+#    dfr = get_df(value, 'recovered')
+#    recovered_diff = get_range(dfr['Cases'])
+#    dfa = pd.DataFrame(dfc['Cases'] - (dfd['Cases'] + dfr['Cases']))
+#    active_diff = get_range(dfa[dfa.columns[0]])
     fig = plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, active_diff)
     return fig
 

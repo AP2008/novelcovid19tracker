@@ -85,6 +85,7 @@ app = dash.Dash(__name__,
                 )
 
 app.layout = html.Div([
+    html.Base(target="_parent"),
     navbar("Infocenter"),
     dbc.Row([
         dbc.Col(html.Div(what_is_covid), width=12, lg=6),

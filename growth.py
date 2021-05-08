@@ -1304,6 +1304,7 @@ app = dash.Dash(__name__,
 CONTENT_STYLE = {
 }
 app.layout = html.Div([
+    html.Base(target="_parent"),
     navbar("Growth"),
     html.Div([
         html.Div([

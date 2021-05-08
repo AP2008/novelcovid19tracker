@@ -2,8 +2,9 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash_defer_js_import import Import
+import extras
 
-main = "http://thunder2020.pythonanywhere.com/"
+main = f"{extras.root}/"
 
 SIDEBAR_STYLE = {
     "position": "fixed",

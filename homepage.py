@@ -12,6 +12,7 @@ app = dash.Dash(__name__,
                 requests_pathname_prefix='/home/')
 CORONA_LOGO = 'https://cdn.cnn.com/cnnnext/dam/assets/200204130938-cdc-coronavirus-illustration-exlarge-169.jpg'
 app.layout = html.Div(children=[
+    html.Base(target="_parent"),
     html.Div(id="PEST"),
         navbar("Home"),
         html.Div([
@@ -29,14 +30,14 @@ app.layout = html.Div(children=[
 #                        dbc.Row([
 #                            dbc.Col(html.Img(src=CORONA_LOGO, height="30px", className="responsive")),
 #                            dbc.Col(dbc.ButtonGroup([
-#                                        dbc.Button("Home", href="https://thunder2020.pythonanywhere.com/", color='success'),
-#                                        dbc.Button("Timeline", href="https://thunder2020.pythonanywhere.com/timeline/", color='success'),
-#                                        dbc.Button("Map", href="https://thunder2020.pythonanywhere.com/map/", color='success'),
-#                                        dbc.Button("DataTable", href="https://thunder2020.pythonanywhere.com/table/", color='success'),
-#                                        dbc.Button("Counter", href="https://thunder2020.pythonanywhere.com/counter/", color='success'),
-#                                        dbc.Button("Growth", href="https://thunder2020.pythonanywhere.com/growth/", color='success'),
-#                                        dbc.Button("Infocenter", href="https://thunder2020.pythonanywhere.com/infocentre/", color='success'),
-#                                        dbc.Button("About", href="https://thunder2020.pythonanywhere.com/aboutme/", color='success')
+#                                        dbc.Button("Home", href=f"{extras.root}/", color='success'),
+#                                        dbc.Button("Timeline", href=f"{extras.root}/timeline/", color='success'),
+#                                        dbc.Button("Map", href=f"{extras.root}/map/", color='success'),
+#                                        dbc.Button("DataTable", href=f"{extras.root}/table/", color='success'),
+#                                        dbc.Button("Counter", href=f"{extras.root}/counter/", color='success'),
+#                                        dbc.Button("Growth", href=f"{extras.root}/growth/", color='success'),
+#                                        dbc.Button("Infocenter", href=f"{extras.root}/infocentre/", color='success'),
+#                                        dbc.Button("About", href=f"{extras.root}/aboutme/", color='success')
 #                                    ], size='lg', className='mr-1'), align='right')
 #                        ])
 #                )
@@ -45,61 +46,61 @@ app.layout = html.Div(children=[
             dbc.Row([
                 dbc.Col(
                     dbc.Card([
-#                        html.Iframe(src=https://thunder2020.pythonanywhere.com/timeline", width=300, height=800),
-                        dbc.Button(dbc.CardImg(src=app.get_asset_url('bar_g.jpg'), className="responsive"), href='https://thunder2020.pythonanywhere.com/timeline'),
+#                        html.Iframe(src={extras.root}/timeline", width=300, height=800),
+                        dbc.Button(dbc.CardImg(src=app.get_asset_url('bar_g.jpg'), className="responsive"), href=f'{extras.root}/timeline'),
                         dbc.CardBody([
                             html.H4('Timeline', style=sn),
                             html.P('The TIMELINE page shows the Covid-19 data of most of the countries as a time-series.', style=sn),
-                            dbc.Button('Timeline', color='primary', href='https://thunder2020.pythonanywhere.com/timeline', size='lg')
+                            dbc.Button('Timeline', color='primary', href=f'{extras.root}/timeline', size='lg')
                         ])
                     ], className="z-depth-3"), width=12, lg=4),
                 dbc.Col(
                     dbc.Card([
-                        dbc.Button(dbc.CardImg(src=app.get_asset_url('counter_g.jpg'), className="responsive"), href='https://thunder2020.pythonanywhere.com/counter'),
+                        dbc.Button(dbc.CardImg(src=app.get_asset_url('counter_g.jpg'), className="responsive"), href=f'{extras.root}/counter'),
                         dbc.CardBody([
                             html.H4('Counter', style=sn),
                             html.P('The COUNTER page shows the Worldwide Covid-19 cases, deaths and recoveries. You can also choose a country to show its statistics.', style=sn),
-                            dbc.Button('Counter', color='primary', href='https://thunder2020.pythonanywhere.com/counter', size='lg')
+                            dbc.Button('Counter', color='primary', href=f'{extras.root}/counter', size='lg')
                         ])
                     ], className="z-depth-3")
                 , width=12, lg=4),
                 dbc.Col(
                     dbc.Card([
-                        dbc.Button(dbc.CardImg(src=app.get_asset_url('table_g.jpg'), className="responsive"), href='https://thunder2020.pythonanywhere.com/datatable'),
+                        dbc.Button(dbc.CardImg(src=app.get_asset_url('table_g.jpg'), className="responsive"), href=f'{extras.root}/datatable'),
                         dbc.CardBody([
                             html.H4('Data Table', style=sn),
                             html.P('The TABLE page shows the COVID-19 data of India district-wise and state-wise. It also shows the World COVID-19 data continent-wise.', style=sn),
-                            dbc.Button('Table', color='primary', href='https://thunder2020.pythonanywhere.com/table', size='lg')
+                            dbc.Button('Table', color='primary', href=f'{extras.root}/datatable', size='lg')
                         ])
                     ], className="z-depth-3"),
                 width=12, lg=4),
             dbc.Col(
                 dbc.Card([
-                    dbc.Button(dbc.CardImg(src=app.get_asset_url('map_g.jpg'), className="responsive"), href='https://thunder2020.pythonanywhere.com/map'),
+                    dbc.Button(dbc.CardImg(src=app.get_asset_url('map_g.jpg'), className="responsive"), href=f'{extras.root}/map'),
                     dbc.CardBody([
                         html.H4('Choropleth map', style=sn),
                         html.P('The MAP page shows a Choropleth map of the confirmed cases in India state-wise and the confirmed cases of most of the countries.', style=sn),
-                        dbc.Button('Choropleth Map', color='primary', href='https://thunder2020.pythonanywhere.com/map', size='lg')
+                        dbc.Button('Choropleth Map', color='primary', href=f'{extras.root}/map', size='lg')
                     ])
                 ], className="z-depth-3"),
                 width=12, lg=4),
             dbc.Col(
                 dbc.Card([
-                    dbc.Button(dbc.CardImg(src=app.get_asset_url('growth.png'), className="responsive"), href='https://thunder2020.pythonanywhere.com/growth'),
+                    dbc.Button(dbc.CardImg(src=app.get_asset_url('growth.png'), className="responsive"), href=f'{extras.root}/growth'),
                     dbc.CardBody([
                         html.H4('Growth', style=sn),
                         html.P('The GROWTH page shows the new confirmed , deaths, recoveries and active cases of most of the countries.', style=sn),
-                        dbc.Button('Growth', color='primary', href='https://thunder2020.pythonanywhere.com/growth', size='lg')
+                        dbc.Button('Growth', color='primary', href=f'{extras.root}/growth', size='lg')
                     ])
                 ], className="z-depth-3"),
                 width=12, lg=4),
             dbc.Col(
                 dbc.Card([
-                    dbc.Button(dbc.CardImg(src=app.get_asset_url('Infocentre.png'), className="responsive"), href='https://thunder2020.pythonanywhere.com/infocenter'),
+                    dbc.Button(dbc.CardImg(src=app.get_asset_url('Infocentre.png'), className="responsive"), href=f'{extras.root}/infocenter'),
                     dbc.CardBody([
                         html.H4('Infocenter', style=sn),
                         html.P("The INFOCENTER gives information on Covid-19, it's symptoms, vaccination and prevention", style=sn),
-                        dbc.Button("Infocenter", color='primary', href='https://thunder2020.pythonanywhere.com/infocentre', size='lg')
+                        dbc.Button("Infocenter", color='primary', href=f'{extras.root}/infocenter', size='lg')
                     ])
                 ], className="z-depth-3"),
                 width=12, lg=4)]),
@@ -109,7 +110,7 @@ app.layout = html.Div(children=[
                     # dbc.CardBody([
                         # html.H4('Counter', style=sn),
                         # html.P('The COUNTER page shows the Worldwide Covid-19 cases, deaths and recoveries. You can also choose a country to show its statistics.', style=sn),
-                        # dbc.Button('Counter', color='primary', href='http://127.0.0.1:8080/counter', size='lg')
+                        # dbc.Button('Counter', color='primary', href=f'http://127.0.0.1:8080/counter', size='lg')
                     # ])
                 # ]),
                 # width=12
@@ -151,7 +152,7 @@ html.Div([create_cop(app)])
 #    chill1 = []
 #    for x in range(20):
 #        chill1.append(
-#                html.A(dic[x][0], href=dic[x][1], style={'color':'red'})
+#                html.A(dic[x][0], href=fdic[x][1], style={'color':'red'})
 #        )
 #        chill1.append(
 #                html.A('|||', style={'color':'grey'})

@@ -34,6 +34,7 @@ CONTENT_STYLE = {
 
 app.layout = html.Div([
     navbar("Counter"),
+    html.Base(target="_parent"),
     dbc.Row([
         dbc.Col([
             html.H4("CASES - WORLD"),

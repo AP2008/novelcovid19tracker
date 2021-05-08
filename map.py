@@ -19,6 +19,7 @@ app = dash.Dash(__name__,
                 requests_pathname_prefix='/map/'
      )
 app.layout = html.Div(children=[
+    html.Base(target="_parent"),
     html.Div([navbar("Map")]),
     html.Div([
         dcc.Dropdown(

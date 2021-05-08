@@ -23,6 +23,7 @@ CONTENT_STYLE = {
 }
 
 app.layout = html.Div([
+    html.Base(target="_parent"),
     html.Div([
         navbar("About")
     ]),

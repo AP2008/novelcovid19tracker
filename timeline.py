@@ -1280,6 +1280,7 @@ CONTENT_STYLE = {
 }
 
 app.layout = html.Div([
+    html.Base(target="_parent"),
         navbar("Timeline"),
 html.Div([
     html.Div(id = 'Fe_He', children=[

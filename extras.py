@@ -1,5 +1,6 @@
 from modules import *
 theme = dbc.themes.SUPERHERO
+root = "https://novcov19.ml"
 
 def getip():
     country = requests.get("http://ip-api.com/json/{}?fields=countryCode".format(request.headers.get('X-Forwarded-For'))).json()["countryCode"]
@@ -31,6 +32,7 @@ ind_str = """
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </head>
     <body>
+        <base target="_parent"></base>
         {%app_entry%}
         <footer>
             {%config%}

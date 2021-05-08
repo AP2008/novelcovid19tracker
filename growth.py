@@ -10,10 +10,8 @@ from sidebar import *
 import extras
 import time
 from dash.exceptions import PreventUpdate
-#from dash_defer_js_import import Import
 
-pt = True
-nhj=""
+
 external_stylesheets = [extras.theme]
 url_countries = 'https://api.covid19api.com/countries'
 page_countries = [
@@ -1307,18 +1305,11 @@ app.layout = html.Div([
     html.Base(target="_parent"),
     navbar("Growth"),
     html.Div([
-        html.Div([
-            dcc.Interval(
-                id="ic",
-                interval=20000,
-                n_intervals=0
-            )],
-            id="temp"
-        ),
         dcc.Dropdown(
             id = 'drop',
             options = ddc,
             style=dict(width='100%'),
+            value='india'
         ),
         html.Div([
             dcc.Dropdown(id="ind_drop")],
@@ -1341,19 +1332,6 @@ app.layout = html.Div([
     ])
 ])
 
-
-
-@app.callback([Output("drop", "value"), Output("temp", "children")],
-        [Input("ic", "n_intervals")])
-def updip(r):
-    global pt
-    s = extras.getip()
-    print(pt)
-    pt = s
-    print("PT: ", pt)
-    h = n['ISO2'].values.tolist().index(s)
-    c = slugs[h]
-    return c, []
 
 @app.callback([Output("net", "children"), Output("net2", "style")],
         [Input("drop", "value")])
@@ -1495,8 +1473,6 @@ def drop3_c(val, val2, val3, val4):
     return fig
 
 def glob_plot(value):
-    global nhj
-    nhj = value
     dfc = get_df(value)
     dates = dfc['Date']
     confirmed_diff = get_range(dfc['Confirmed'])

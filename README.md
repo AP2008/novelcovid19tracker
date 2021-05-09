@@ -19,4 +19,4 @@
     * Displays the Confirmed Cases, Recoveries and the Deceased Covid-19 Data for the World
     * The User can select a country to show the Country's data
 
-It is hosted on [https://novelcovid19tracker.herokuapp.com/home](https://novelcovid19tracker.herokuapp.com/home)
+It is hosted on [https://novcov19.ml](https://novcov19.ml)

@@ -40,7 +40,7 @@ def navbar(ap):
     Lis = []
     for n in ["Home", "Timeline", "DataTable", "Map", "Counter", "Growth", "Vaccine", "Infocenter", "About"]:
         if ap == n:
-            Lis.append(html.Li(html.A(n, href=f"{main}{n.lower()}", className="act-link")))
+            Lis.append(html.Li(html.A(n, href=f"{main}{n.lower() if n != 'Home'}", className="act-link")))
         else:
             Lis.append(html.Li(html.A(n, href=f"{main}{n.lower()}")))
     navbar = html.Div([

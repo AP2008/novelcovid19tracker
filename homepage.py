@@ -125,7 +125,6 @@ app.layout = html.Div(children=[
                 # ]),
                 # width=12
             # )
-html.Div([create_cop(app)])
 
 ])])
 

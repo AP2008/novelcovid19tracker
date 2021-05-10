@@ -15,8 +15,8 @@ external_stylesheets = [extras.theme]
 countries = extras.vacc
 
 app = dash.Dash(__name__, 
-                external_stylesheets=external_stylesheets)
-#                requests_pathname_prefix='/vaccine/')
+                external_stylesheets=external_stylesheets,
+                requests_pathname_prefix='/vaccine/')
 app.layout = html.Div([
     html.Base(target="_parent"),
     navbar("Vaccine"),

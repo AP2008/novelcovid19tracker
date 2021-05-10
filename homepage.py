@@ -83,7 +83,7 @@ app.layout = html.Div(children=[
                         dbc.Button('Choropleth Map', color='primary', href=f'{extras.root}/map', size='lg')
                     ])
                 ], className="z-depth-3"),
-                width=12, lg=4),
+                width=12, lg=3),
             dbc.Col(
                 dbc.Card([
                     dbc.Button(dbc.CardImg(src=app.get_asset_url('growth.png'), className="responsive"), href=f'{extras.root}/growth'),
@@ -93,7 +93,17 @@ app.layout = html.Div(children=[
                         dbc.Button('Growth', color='primary', href=f'{extras.root}/growth', size='lg')
                     ])
                 ], className="z-depth-3"),
-                width=12, lg=4),
+                width=12, lg=3),
+            dbc.Col(
+                dbc.Card([
+                    dbc.Button(dbc.CardImg(src=app.get_asset_url('vaccine.png'), className="responsive"), href=f'{extras.root}/vaccine'),
+                    dbc.CardBody([
+                        html.H4('Vaccine', style=sn),
+                        html.P('The VACCINE page gives information about vaccination in different countries', style=sn),
+                        dbc.Button('Growth', color='primary', href=f'{extras.root}/vaccine', size='lg')
+                    ])
+                ], className="z-depth-3"),
+                width=12, lg=3),
             dbc.Col(
                 dbc.Card([
                     dbc.Button(dbc.CardImg(src=app.get_asset_url('Infocentre.png'), className="responsive"), href=f'{extras.root}/infocenter'),
@@ -103,7 +113,7 @@ app.layout = html.Div(children=[
                         dbc.Button("Infocenter", color='primary', href=f'{extras.root}/infocenter', size='lg')
                     ])
                 ], className="z-depth-3"),
-                width=12, lg=4)]),
+                width=12, lg=3)]),
             # dbc.Col(
                 # dbc.Card([, className="z-depth-3"
                     # dbc.CardImg(src=app.get_asset_url('counter_g.jpg')),

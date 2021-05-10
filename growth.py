@@ -184,8 +184,8 @@ def plot_data(dates, confirmed_diff, deaths_diff, recovered_diff, active_diff):
                           t=0,
                           pad=0
                       ),
-                      plot_bgcolor='#2B3E50',
-                      paper_bgcolor='#2B3E50')
+                      plot_bgcolor='#0f2537',
+                      paper_bgcolor='#0f2537')
     fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'), rangeslider=dict(visible=True))
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
     return fig

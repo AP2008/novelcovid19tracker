@@ -5,6 +5,7 @@ from table import app as table
 from homepage import app as home
 from counter import app as counter
 from growth import app as growth
+from vaccine import app as vaccine
 from about_covid import app as about_covid
 from about import app as about_me
 import arc
@@ -18,6 +19,7 @@ application = DispatcherMiddleware(home.server, {
     '/map': map.server,
     '/datatable': table.server,
     '/growth': growth.server,
+    '/vaccine': vaccine.server,
     '/infocenter': about_covid.server,
     '/about': about_me.server,
     '/arc-sw.js': arc.app

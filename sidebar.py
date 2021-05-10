@@ -29,16 +29,16 @@ def navbar(ap):
                         # DONE
                         dbc.NavLink("Counter", href=f"{main}counter/",   active=(ap == "Counter")),
                         # DONE
-                        dbc.NavLink("Growth", href=f"{main}growth/",   active=(ap == "Growth")),
+                        dbc.NavLink("Growth", href=f"{main}growth/",   active=(ap == "Growth")),\
+                        # DONE
+                        dbc.NavLink("Vaccine", href=f"{main}vaccine/",   active=(ap == "Vaccine")),
                         # DONE
                         dbc.NavLink("Infocenter", href=f"{main}infocentre/",   active=(ap == "Infocenter")),
-                        # # 0%
-                        # dbc.NavLink("Newsletter", href="https://cov
-                        # Done
+                        # DONE
                         dbc.NavLink("About", href=f"{main}aboutme/",   active=(ap == "About"))
     ]
     Lis = []
-    for n in ["Home", "Timeline", "DataTable", "Map", "Counter", "Growth", "Infocenter", "About"]:
+    for n in ["Home", "Timeline", "DataTable", "Map", "Counter", "Growth", "Vaccine" "Infocenter", "About"]:
         if ap == n:
             Lis.append(html.Li(html.A(n, href=f"{main}{n.lower()}", className="act-link")))
         else:

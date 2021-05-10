@@ -19,6 +19,5 @@ from flask import send_file
 import flask
 import io
 from flask import Flask
-import cherrypy
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from flask import request

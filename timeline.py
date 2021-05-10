@@ -137,7 +137,7 @@ def plot_bar(val, n, start, end):
                       t=0,
                       pad=0
                             ),
-                      paper_bgcolor='#2B3E50')
+                      paper_bgcolor='#0f2537')
     fig.update_xaxes(tickangle=90, tickfont=dict(family='Rockwell', color='white'))
     fig.update_yaxes(tickfont=dict(family='Rockwell', color='white'))
     return fig

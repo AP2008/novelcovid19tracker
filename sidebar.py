@@ -40,9 +40,21 @@ def navbar(ap):
     Lis = []
     for n in ["Home", "Timeline", "DataTable", "Map", "Counter", "Growth", "Vaccine", "Infocenter", "About"]:
         if ap == n:
-            Lis.append(html.Li(html.A(n, href=f"{main}{n.lower() if n != 'Home'}", className="act-link")))
+            Lis.append(html.Li(html.A(n, href=f"{main}{n.lower() if n != 'Home' else ''}", className="act-link")))
         else:
             Lis.append(html.Li(html.A(n, href=f"{main}{n.lower()}")))
+    Lis.append(
+        html.A(
+            html.Img(
+                src="https://cdn.ko-fi.com/cdn/kofi3.png?v=2",
+                style="border:0px;height:36px;",
+                height=36,
+                alt='Buy Me a Coffee at ko-fi.com'
+            ),
+            href="https://ko-fi.com/R6R84J2II",
+            target="_blank"
+        )
+    )
     navbar = html.Div([
         html.Div([
             html.H2("NavBar", className="display-4", style={'color':'black'}),

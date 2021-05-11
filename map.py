@@ -144,7 +144,7 @@ def map(n, drop_val):
         )
         return fig
     elif drop_val == 'world':
-        temp = requests.get("https://covid.ourworldindata.org/data/owid-covid-data.csv")
+        temp = requests.get("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.csv")
         temp = io.StringIO(temp.content.decode('utf-8'))
         dfData = pd.read_csv(temp)
         dfData = dfData.fillna(0)
@@ -159,14 +159,14 @@ def map(n, drop_val):
         text = []
         for i in locations:
             n = dfData.loc[i]['total_cases']
-            z.append(single_list(dfData.loc[i]['total_cases']))
-            text.append('' + str(dfData.loc[i]['location'][-1])
+            z.append((single_list(dfData.loc[i]['total_cases'])/single_list(dfData.loc[i]['population']))*100)
+            text.append('' + str(dfData.loc[i]['location'])
                     + '<br> Confirmed: ' + str(single_list(dfData.loc[i]['total_cases']))
                     + '<br> New Confirmed: ' + str(single_list(dfData.loc[i]['new_cases']))
                     + '<br> Deaths: ' + str(single_list(dfData.loc[i]['total_deaths']))
                     + '<br> New Deaths: ' + str(single_list(dfData.loc[i]['new_deaths'])))
-        fig = go.Figure(data=go.Choropleth(locations=locations, z=z, colorscale='Reds', text=text, hoverinfo='text'))
-        fig.update_traces(showscale=False)
+        fig = go.Figure(data=go.Choropleth(locations=locations, z=z, colorscale='Reds', text=text, hoverinfo='text+z'))
+#        fig.update_traces(showscale=False)
         fig.update_layout(#autosize=True,
                                          plot_bgcolor='#2B3E50',
                                          paper_bgcolor='#2B3E50',
